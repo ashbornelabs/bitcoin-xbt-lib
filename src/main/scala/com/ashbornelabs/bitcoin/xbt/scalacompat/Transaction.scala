@@ -322,6 +322,39 @@ object Transaction extends BtcSerializer[Transaction] {
     signInput(tx, inputIndex, Script.write(previousOutputScript), sighashType, amount, signatureVersion, privateKey)
 
   /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param tx                   input transaction
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature (DER + sighash byte) of this tx for this specific tx input
+   */
+  def signInput(tx: Transaction, inputIndex: Int, previousOutputScript: ByteVector, sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector = {
+    tx.signInput(inputIndex, previousOutputScript, sighashType, inputs, signatureVersion, privateKey)
+  }
+
+  /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param tx                   input transaction
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature (DER + sighash byte) of this tx for this specific tx input
+   */
+  def signInput(tx: Transaction, inputIndex: Int, previousOutputScript: Seq[ScriptElt], sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector =
+    signInput(tx, inputIndex, Script.write(previousOutputScript), sighashType, inputs, signatureVersion, privateKey)
+
+  /**
    * @param sig ECDSA signature in compact format
    * @param sighashType signature hash type, which will be appended to the signature
    * @return an ECDSA signature in the format used in transaction witnesses: DER encoded followed by a sighash byte
@@ -555,6 +588,37 @@ case class Transaction(version: Long, txIn: Seq[TxIn], txOut: Seq[TxOut], lockTi
   def signInputCompact(inputIndex: Int, previousOutputScript: Seq[ScriptElt], sighashType: Int, amount: Satoshi, signatureVersion: Int, privateKey: PrivateKey): ByteVector64 =
     signInputCompact(inputIndex, Script.write(previousOutputScript), sighashType, amount, signatureVersion, privateKey)
 
+  /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature of this tx for this specific tx input in compact 64 bytes format
+   */
+  def signInputCompact(inputIndex: Int, previousOutputScript: ByteVector, sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector64 = {
+    kmp.signInputCompact(inputIndex, previousOutputScript.toArrayUnsafe, sighashType, inputs.map(scala2kmp).asJava, signatureVersion, privateKey.priv)
+  }
+
+  /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature of this tx for this specific tx input in compact 64 bytes format
+   */
+  def signInputCompact(inputIndex: Int, previousOutputScript: Seq[ScriptElt], sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector64 =
+    signInputCompact(inputIndex, Script.write(previousOutputScript), sighashType, inputs, signatureVersion, privateKey)
+
 
   /**
    * sign a tx input
@@ -584,6 +648,37 @@ case class Transaction(version: Long, txIn: Seq[TxIn], txOut: Seq[TxOut], lockTi
    */
   def signInput(inputIndex: Int, previousOutputScript: Seq[ScriptElt], sighashType: Int, amount: Satoshi, signatureVersion: Int, privateKey: PrivateKey): ByteVector =
     signInput(inputIndex, Script.write(previousOutputScript), sighashType, amount, signatureVersion, privateKey)
+
+  /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature of this tx for this specific tx input
+   */
+  def signInput(inputIndex: Int, previousOutputScript: ByteVector, sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector = {
+    ByteVector.view(kmp.signInput(inputIndex, previousOutputScript.toArrayUnsafe, sighashType, inputs.map(scala2kmp).asJava, signatureVersion, privateKey.priv))
+  }
+
+  /**
+   * sign a pre-segwit or segwit v0 tx input, knowing every UTXO spent by this tx: this is required to sign with
+   * SIGHASH_UNIFIED, whose signature hash commits to all of them
+   *
+   * @param inputIndex           index of the tx input that is being processed
+   * @param previousOutputScript script code of the output claimed by this tx input
+   * @param sighashType          signature hash type, which will be appended to the signature
+   * @param inputs               UTXOs spent by this transaction
+   * @param signatureVersion     signature version (1: segwit, 0: pre-segwit)
+   * @param privateKey           private key
+   * @return the encoded signature of this tx for this specific tx input
+   */
+  def signInput(inputIndex: Int, previousOutputScript: Seq[ScriptElt], sighashType: Int, inputs: Seq[TxOut], signatureVersion: Int, privateKey: PrivateKey): ByteVector =
+    signInput(inputIndex, Script.write(previousOutputScript), sighashType, inputs, signatureVersion, privateKey)
 
   /**
    * Sign a taproot tx input, using the internal key path.
