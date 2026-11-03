@@ -1,7 +1,9 @@
-# Simple Scala Bitcoin Library
+# Simple Scala Bitcoin XBT Library
 
-[![Build Status](https://github.com/ACINQ/bitcoin-lib/workflows/Build%20&%20Test/badge.svg)](https://github.com/ACINQ/bitcoin-lib/actions?query=workflow%3A%22Build+%26+Test%22)
-[![Maven Central](https://img.shields.io/maven-central/v/fr.acinq/bitcoin-lib_2.13)](https://search.maven.org/search?q=g:fr.acinq%20a:bitcoin-lib_2.13*)[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+[![Build Status](https://github.com/ashbornelabs/bitcoin-xbt-lib/actions/workflows/main.yml/badge.svg)](https://github.com/ashbornelabs/bitcoin-xbt-lib/actions/workflows/main.yml)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
+
+Fork of [ACINQ/bitcoin-lib](https://github.com/ACINQ/bitcoin-lib) for the Bitcoin BLAKE2b (XBT) chain.
 
 ## Overview
 
@@ -19,7 +21,7 @@ This is a simple scala library which implements most of the bitcoin protocol:
 * BIP 350 (Bech32m format)
 
 It is actually a wrapper on top of our [Kotlin Bitcoin Library](https://github.com/ACINQ/bitcoin-kmp) that makes it easier to use in scala projects.
-All the features are implemented in Kotlin in the `fr.acinq.bitcoin` namespace and the scala wrappers can be found in the `fr.acinq.bitcoin.scalacompat` namespace.
+All the features are implemented in Kotlin in the `fr.acinq.bitcoin` namespace and the scala wrappers can be found in the `com.ashbornelabs.bitcoin.xbt.scalacompat` namespace.
 
 ## Objectives
 
@@ -37,22 +39,14 @@ Our goal is not to re-implement a full Bitcoin node but to build a library that 
 
 ## Configuring maven/sbt
 
-* releases and milestones are pushed to maven central
-* snapshots are pushed to the sonatype snapshot repository
+`bitcoin-xbt-lib` is not published to a public repository yet. Run `./mvnw install` to install it in your local Maven repository, then add:
 
 ```xml
- <repositories>
-    <repository>
-        <id>sonatype snapshots</id>
-        <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-    </repository>
-</repositories>
-
 <dependencies>
   <dependency>
-    <groupId>fr.acinq</groupId>
-    <artifactId>bitcoin-lib_2.13</artifactId>
-    <version>0.43.2</version>
+    <groupId>com.ashbornelabs</groupId>
+    <artifactId>bitcoin-xbt-lib_2.13</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
   </dependency>
 </dependencies>
 ```
@@ -90,8 +84,8 @@ mvn scala:console
 scala> import fr.acinq.bitcoin._
 import fr.acinq.bitcoin._
 
-scala> import fr.acinq.bitcoin.scalacompat.Crypto._
-import fr.acinq.bitcoin.scalacompat.Crypto._
+scala> import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto._
 
 scala> import scodec.bits._
 import scodec.bits._
