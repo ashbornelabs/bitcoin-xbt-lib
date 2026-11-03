@@ -1,5 +1,7 @@
 # Simple Scala Bitcoin XBT Library
 
+> Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
+
 [![Build Status](https://github.com/ashbornelabs/bitcoin-xbt-lib/actions/workflows/main.yml/badge.svg)](https://github.com/ashbornelabs/bitcoin-xbt-lib/actions/workflows/main.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE)
 
