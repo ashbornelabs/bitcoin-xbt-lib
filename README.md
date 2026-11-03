@@ -68,7 +68,7 @@ Our goal is not to re-implement a full Bitcoin node but to build a library that 
 
 ## Configuring maven/sbt
 
-`bitcoin-xbt-lib` and `bitcoin-xbt-kmp` are not published to a public repository yet. Install [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp) in your local Maven repository first, then run `./mvnw install` here and add:
+`bitcoin-xbt-lib` and `bitcoin-xbt-kmp` are not published to a public repository yet. Follow [BUILDING.md](BUILDING.md) to install both in your local Maven repository, then add:
 
 ```xml
 <dependencies>
