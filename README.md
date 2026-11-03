@@ -7,6 +7,30 @@
 
 Fork of [ACINQ/bitcoin-lib](https://github.com/ACINQ/bitcoin-lib) for the Bitcoin BLAKE2b (XBT) chain.
 
+## About XBT
+
+Bitcoin BLAKE2b (XBT) shares Bitcoin's history up to block 961,639 and then follows the consensus rules of [Bitcoin Knots](https://github.com/bitcoinknots/bitcoin) with the BLAKE2b fork. From block 961,640 on mainnet:
+
+* blocks are mined with BLAKE2b proof-of-work instead of SHA256d, and use a 164-byte version 2 header;
+* signatures can opt in to a unified signature hash (`SIGHASH_UNIFIED`, `0x20`): they are not valid on the SHA256d chain, which protects transactions against replay;
+* the BIP 110 reduced data rules (RDTS) apply until they expire.
+
+Addresses, key derivation paths, BIP 39 mnemonics and secp256k1 signatures are the same as in Bitcoin.
+
+The XBT rules are implemented in [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp), which follows Bitcoin Knots tag `v29.4.3.knots20260508`. Its README lists the parameters of each network.
+
+## Changes from bitcoin-lib
+
+| Area | Change |
+|---|---|
+| Package | `fr.acinq.bitcoin.scalacompat` is now `com.ashbornelabs.bitcoin.xbt.scalacompat`. |
+| Coordinates | `com.ashbornelabs:bitcoin-xbt-lib_2.13`. |
+| Kotlin library | The library wraps `bitcoin-xbt-kmp` (`com.ashbornelabs.bitcoin.xbt`) instead of ACINQ's bitcoin-kmp, so it applies the XBT rules: `ScriptFlags.MANDATORY_SCRIPT_VERIFY_FLAGS` includes the unified signature hash and `ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS` the BIP 110 rules. |
+| Chains | `Block.LivenetGenesisBlock`, `Block.Testnet4GenesisBlock` and `Block.RegtestGenesisBlock`. Testnet3 and signet are removed. |
+| Signatures | `Transaction.hashForSigningUnified`, and `signInput` and `signInputCompact` overloads that take every spent output, to sign with `SIGHASH_UNIFIED`. `isUnified` tells whether a sighash type sets it. |
+
+The rest of the API keeps the names and signatures of bitcoin-lib. Block headers, consensus parameters and PSBTs have no Scala wrapper: use them from `bitcoin-xbt-kmp`, which this library depends on.
+
 ## Overview
 
 This is a simple scala library which implements most of the bitcoin protocol:
