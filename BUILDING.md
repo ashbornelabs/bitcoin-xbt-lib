@@ -1,5 +1,7 @@
 # Build instructions
 
+> Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
+
 ## Requirements
 
 To build bitcoin-xbt-lib, you need:
