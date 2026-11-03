@@ -56,6 +56,9 @@ package object scalacompat {
 
   def isHashNone(sighashType: Int): Boolean = (sighashType & 0x1f) == xbt.SigHash.SIGHASH_NONE
 
+  /** @return true if signatures with this sighash type sign the XBT unified signature hash. */
+  def isUnified(sighashType: Int): Boolean = SigHash.isUnified(sighashType)
+
   def computeP2PkhAddress(pub: PublicKey, chainHash: BlockHash): String = xbt.Bitcoin.computeP2PkhAddress(pub, chainHash)
 
   def computeBIP44Address(pub: PublicKey, chainHash: BlockHash): String = computeP2PkhAddress(pub, chainHash)
