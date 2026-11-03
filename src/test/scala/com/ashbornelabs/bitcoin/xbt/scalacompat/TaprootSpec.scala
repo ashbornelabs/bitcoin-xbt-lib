@@ -19,7 +19,7 @@ class TaprootSpec extends FunSuite {
     val script = Script.pay2tr(internalKey, KeyPathTweak)
     val (outputKey, _) = internalKey.outputKey(TaprootTweak.KeyPathTweak)
     assert("tb1phlhs7afhqzkgv0n537xs939s687826vn8l24ldkrckvwsnlj3d7qj6u57c" == Bech32.encodeWitnessAddress("tb", 1, outputKey.pub.value.toByteArray))
-    assert(addressFromPublicKeyScript(Block.Testnet3GenesisBlock.hash, script).contains("tb1phlhs7afhqzkgv0n537xs939s687826vn8l24ldkrckvwsnlj3d7qj6u57c"))
+    assert(addressFromPublicKeyScript(Block.Testnet4GenesisBlock.hash, script).contains("tb1phlhs7afhqzkgv0n537xs939s687826vn8l24ldkrckvwsnlj3d7qj6u57c"))
 
     // tx sends to tb1phlhs7afhqzkgv0n537xs939s687826vn8l24ldkrckvwsnlj3d7qj6u57c
     val tx = Transaction.read(
@@ -72,7 +72,7 @@ class TaprootSpec extends FunSuite {
     assert(Script.pay2trOutputKey(tx.txOut(1).publicKeyScript).contains(outputKey))
 
     // we want to spend
-    val Right(outputScript) = addressToPublicKeyScript(Block.Testnet3GenesisBlock.hash, "tb1pn3g330w4n5eut7d4vxq0pp303267qc6vg8d2e0ctjuqre06gs3yqnc5yx0")
+    val Right(outputScript) = addressToPublicKeyScript(Block.Testnet4GenesisBlock.hash, "tb1pn3g330w4n5eut7d4vxq0pp303267qc6vg8d2e0ctjuqre06gs3yqnc5yx0")
     val tx1 = Transaction(
       2,
       TxIn(OutPoint(tx, 1), ByteVector.empty, fr.acinq.bitcoin.TxIn.SEQUENCE_FINAL) :: Nil,
@@ -210,7 +210,7 @@ class TaprootSpec extends FunSuite {
       ScriptTree.Branch(leaves(0), leaves(1)),
       leaves(2)
     )
-    val blockchain = Block.SignetGenesisBlock.hash
+    val blockchain = Block.Testnet4GenesisBlock.hash
 
     // we use key #1 as our internal key
     val internalPubkey = privs.head.xOnlyPublicKey()
