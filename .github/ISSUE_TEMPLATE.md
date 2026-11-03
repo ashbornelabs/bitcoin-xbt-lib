@@ -1,3 +1,4 @@
+<!-- Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE. -->
 <!-- This issue tracker is only for technical issues related to bitcoin-xbt-lib.
 
 Please do not open issues for support requests or generic questions about Bitcoin or XBT.
