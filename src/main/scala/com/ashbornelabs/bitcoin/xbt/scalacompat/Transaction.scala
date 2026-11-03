@@ -274,6 +274,23 @@ object Transaction extends BtcSerializer[Transaction] {
   }
 
   /**
+   * Hash a tx input for signing with the XBT unified signature hash, which commits to every output spent by the transaction.
+   *
+   * @param tx                   transaction to sign
+   * @param inputIndex           index of the transaction input being signed
+   * @param inputs               UTXOs spent by this transaction
+   * @param sighashType          signature hash type, which must include SIGHASH_UNIFIED
+   * @param sigVersion           signature version
+   * @param scriptCode           script code of the input being signed, for pre-segwit and segwit v0 inputs
+   * @param tapleaf_opt          when spending a tapscript, the hash of the corresponding script leaf must be provided
+   * @param annex_opt            (optional) taproot annex
+   * @param codeSeparatorPos_opt position of the last executed OP_CODESEPARATOR, when spending a tapscript
+   */
+  def hashForSigningUnified(tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], sighashType: Int, sigVersion: Int, scriptCode: ByteVector = ByteVector.empty, tapleaf_opt: Option[ByteVector32] = None, annex_opt: Option[ByteVector] = None, codeSeparatorPos_opt: Option[Long] = None): ByteVector32 = {
+    tx.hashForSigningUnified(inputIndex, inputs, sighashType, sigVersion, scriptCode, tapleaf_opt, annex_opt, codeSeparatorPos_opt)
+  }
+
+  /**
    * sign a tx input
    *
    * @param tx                   input transaction
@@ -491,6 +508,22 @@ case class Transaction(version: Long, txIn: Seq[TxIn], txOut: Seq[TxOut], lockTi
   /** Use this function when spending a taproot script path. */
   def hashForSigningTaprootScriptPath(inputIndex: Int, inputs: Seq[TxOut], sighashType: Int, tapleaf: ByteVector32, annex_opt: Option[ByteVector] = None): ByteVector32 = {
     kmp.hashForSigningTaprootScriptPath(inputIndex, inputs.map(scala2kmp).asJava, sighashType, scala2kmp(tapleaf), annex_opt.map(scala2kmp).orNull)
+  }
+
+  /**
+   * Hash a tx input for signing with the XBT unified signature hash, which commits to every output spent by the transaction.
+   *
+   * @param inputIndex           index of the transaction input being signed
+   * @param inputs               UTXOs spent by this transaction
+   * @param sighashType          signature hash type, which must include SIGHASH_UNIFIED
+   * @param sigVersion           signature version
+   * @param scriptCode           script code of the input being signed, for pre-segwit and segwit v0 inputs
+   * @param tapleaf_opt          when spending a tapscript, the hash of the corresponding script leaf must be provided
+   * @param annex_opt            (optional) taproot annex
+   * @param codeSeparatorPos_opt position of the last executed OP_CODESEPARATOR, when spending a tapscript
+   */
+  def hashForSigningUnified(inputIndex: Int, inputs: Seq[TxOut], sighashType: Int, sigVersion: Int, scriptCode: ByteVector = ByteVector.empty, tapleaf_opt: Option[ByteVector32] = None, annex_opt: Option[ByteVector] = None, codeSeparatorPos_opt: Option[Long] = None): ByteVector32 = {
+    kmp.hashForSigningUnified(inputIndex, inputs.map(scala2kmp).asJava, sighashType, sigVersion, scriptCode.toArrayUnsafe, tapleaf_opt.map(scala2kmp).orNull, annex_opt.map(scala2kmp).orNull, codeSeparatorPos_opt.map(Long.box).orNull)
   }
 
   /**
