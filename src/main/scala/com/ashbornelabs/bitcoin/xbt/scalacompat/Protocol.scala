@@ -1,4 +1,4 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import java.io._
 import java.nio.{ByteBuffer, ByteOrder}

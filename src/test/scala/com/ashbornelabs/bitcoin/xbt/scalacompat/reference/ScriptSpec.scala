@@ -1,6 +1,6 @@
-package fr.acinq.bitcoin.scalacompat.reference
+package com.ashbornelabs.bitcoin.xbt.scalacompat.reference
 
-import fr.acinq.bitcoin.scalacompat._
+import com.ashbornelabs.bitcoin.xbt.scalacompat._
 import org.json4s.JsonAST.{JArray, JDouble, JString}
 import org.json4s.jackson.JsonMethods
 import org.json4s.{DefaultFormats, JValue}

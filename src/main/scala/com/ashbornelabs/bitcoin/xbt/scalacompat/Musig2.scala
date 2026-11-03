@@ -1,8 +1,8 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin.crypto.musig2
-import fr.acinq.bitcoin.scalacompat.Crypto.{PrivateKey, PublicKey, XonlyPublicKey}
-import fr.acinq.bitcoin.scalacompat.KotlinUtils._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey, XonlyPublicKey}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import fr.acinq.secp256k1.Secp256k1
 import scodec.bits.ByteVector
 

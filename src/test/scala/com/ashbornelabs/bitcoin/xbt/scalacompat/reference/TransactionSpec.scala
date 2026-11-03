@@ -1,8 +1,8 @@
-package fr.acinq.bitcoin.scalacompat.reference
+package com.ashbornelabs.bitcoin.xbt.scalacompat.reference
 
-import fr.acinq.bitcoin.scalacompat
-import fr.acinq.bitcoin.scalacompat.reference.ScriptSpec.{parseFromText, parseScriptFlags}
-import fr.acinq.bitcoin.scalacompat._
+import com.ashbornelabs.bitcoin.xbt.scalacompat
+import com.ashbornelabs.bitcoin.xbt.scalacompat.reference.ScriptSpec.{parseFromText, parseScriptFlags}
+import com.ashbornelabs.bitcoin.xbt.scalacompat._
 import org.json4s.DefaultFormats
 import org.json4s.JsonAST.{JArray, JInt, JString, JValue}
 import org.json4s.jackson.JsonMethods

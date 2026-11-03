@@ -1,7 +1,7 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin.Base58.Prefix
-import fr.acinq.bitcoin.scalacompat.Crypto._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto._
 import fr.acinq.bitcoin.{Base58, Base58Check}
 import fr.acinq.secp256k1.Secp256k1
 import org.scalatest.FlatSpec

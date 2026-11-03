@@ -1,7 +1,7 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.scalacompat.Crypto.{PrivateKey, PublicKey}
-import fr.acinq.bitcoin.scalacompat.DeterministicWallet.KeyPath
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet.KeyPath
 import fr.acinq.bitcoin.Base58
 import org.scalatest.FunSuite
 import scodec.bits._

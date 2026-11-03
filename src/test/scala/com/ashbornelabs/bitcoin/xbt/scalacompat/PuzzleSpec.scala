@@ -1,4 +1,4 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin.ScriptFlags
 import org.scalatest.FlatSpec

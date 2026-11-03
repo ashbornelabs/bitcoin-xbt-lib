@@ -1,4 +1,4 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import org.json4s.DefaultFormats
 import org.json4s.jackson.JsonMethods

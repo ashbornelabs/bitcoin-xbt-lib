@@ -1,4 +1,4 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import java.math.BigInteger
 import java.net.InetAddress

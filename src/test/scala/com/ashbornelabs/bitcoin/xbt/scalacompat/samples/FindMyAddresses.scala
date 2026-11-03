@@ -1,11 +1,11 @@
-package fr.acinq.bitcoin.scalacompat.samples
+package com.ashbornelabs.bitcoin.xbt.scalacompat.samples
 
-import fr.acinq.bitcoin.scalacompat.{Crypto, MnemonicCode, Script}
-import fr.acinq.bitcoin.scalacompat.Crypto.PublicKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.{Crypto, MnemonicCode, Script}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import fr.acinq.bitcoin.{Base58, Base58Check}
-import fr.acinq.bitcoin.scalacompat.Crypto.PublicKey
-import fr.acinq.bitcoin.scalacompat.DeterministicWallet._
-import fr.acinq.bitcoin.scalacompat.{Crypto, DeterministicWallet, MnemonicCode, Script}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.{Crypto, DeterministicWallet, MnemonicCode, Script}
 
 object FindMyAddresses extends App {
   /**

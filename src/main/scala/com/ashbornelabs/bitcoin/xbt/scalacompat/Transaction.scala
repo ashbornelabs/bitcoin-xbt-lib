@@ -1,9 +1,9 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin
-import fr.acinq.bitcoin.scalacompat.Crypto.PrivateKey
-import fr.acinq.bitcoin.scalacompat.KotlinUtils._
-import fr.acinq.bitcoin.scalacompat.Protocol._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Protocol._
 import scodec.bits.ByteVector
 
 import java.io.{InputStream, OutputStream}

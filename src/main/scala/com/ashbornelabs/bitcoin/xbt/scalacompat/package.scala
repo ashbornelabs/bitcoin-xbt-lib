@@ -1,8 +1,9 @@
-package fr.acinq.bitcoin
+package com.ashbornelabs.bitcoin.xbt
 
 import fr.acinq.bitcoin
-import fr.acinq.bitcoin.scalacompat.Crypto.PublicKey
-import fr.acinq.bitcoin.scalacompat.KotlinUtils._
+import fr.acinq.bitcoin.{BitcoinError, SigHash}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import scodec.bits.ByteVector
 
 import scala.jdk.CollectionConverters.{ListHasAsScala, SeqHasAsJava}

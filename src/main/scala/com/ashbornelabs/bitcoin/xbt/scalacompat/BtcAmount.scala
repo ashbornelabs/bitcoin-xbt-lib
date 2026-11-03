@@ -1,6 +1,6 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.scalacompat.BtcAmount.{btcFormat, milliBtcFormat}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.BtcAmount.{btcFormat, milliBtcFormat}
 
 import java.text.{DecimalFormat, DecimalFormatSymbols}
 import java.util.Locale

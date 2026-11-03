@@ -1,6 +1,6 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.scalacompat.Crypto.PrivateKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
 import fr.acinq.secp256k1.Hex
 import org.scalatest.FlatSpec
 import scodec.bits._
@@ -11,7 +11,7 @@ import scala.util.Random
 class DeterministicWalletSpec extends FlatSpec {
 
   import Protocol._
-  import fr.acinq.bitcoin.scalacompat.DeterministicWallet._
+  import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet._
 
   // these tests are the "official" ones (see https://github.com/bitcoin/bips/blob/master/bip-0032.mediawiki)
 

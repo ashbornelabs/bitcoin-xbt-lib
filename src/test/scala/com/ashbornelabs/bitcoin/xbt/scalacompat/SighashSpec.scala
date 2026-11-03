@@ -1,9 +1,9 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin.SigHash._
-import fr.acinq.bitcoin.scalacompat.Crypto.PrivateKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
 import fr.acinq.bitcoin.{Base58, ScriptFlags, SigVersion}
-import fr.acinq.bitcoin.scalacompat.Crypto.PrivateKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
 import org.scalatest.FunSuite
 import scodec.bits.ByteVector
 

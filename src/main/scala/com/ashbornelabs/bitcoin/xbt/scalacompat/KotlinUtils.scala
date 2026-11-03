@@ -1,7 +1,7 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin
-import fr.acinq.bitcoin.scalacompat.Crypto._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto._
 import scodec.bits.ByteVector
 
 import java.io.{InputStream, OutputStream}

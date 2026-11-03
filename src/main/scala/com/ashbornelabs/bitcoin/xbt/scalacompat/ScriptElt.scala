@@ -1,7 +1,7 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import fr.acinq.bitcoin
-import fr.acinq.bitcoin.scalacompat.Crypto.{PublicKey, XonlyPublicKey}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PublicKey, XonlyPublicKey}
 import scodec.bits.ByteVector
 
 // @formatter:off

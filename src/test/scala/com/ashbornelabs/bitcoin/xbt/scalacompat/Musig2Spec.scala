@@ -1,7 +1,7 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.scalacompat.Crypto.PrivateKey
-import fr.acinq.bitcoin.scalacompat.Crypto.TaprootTweak.KeyPathTweak
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.TaprootTweak.KeyPathTweak
 import fr.acinq.bitcoin.{ScriptFlags, SigHash}
 import org.scalatest.FunSuite
 import scodec.bits.{ByteVector, HexStringSyntax}

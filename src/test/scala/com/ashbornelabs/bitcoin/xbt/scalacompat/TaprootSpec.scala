@@ -1,8 +1,8 @@
-package fr.acinq.bitcoin.scalacompat
+package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.scalacompat.Crypto.TaprootTweak.KeyPathTweak
-import fr.acinq.bitcoin.scalacompat.Crypto.{PrivateKey, PublicKey, TaprootTweak}
-import fr.acinq.bitcoin.scalacompat.KotlinUtils._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.TaprootTweak.KeyPathTweak
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey, TaprootTweak}
+import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import fr.acinq.bitcoin.{Bech32, ScriptFlags, SigHash, SigVersion}
 import fr.acinq.secp256k1.Secp256k1
 import org.scalatest.FunSuite

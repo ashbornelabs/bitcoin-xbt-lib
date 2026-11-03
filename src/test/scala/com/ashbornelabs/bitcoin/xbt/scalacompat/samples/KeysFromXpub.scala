@@ -1,6 +1,6 @@
-package fr.acinq.bitcoin.scalacompat.samples
+package com.ashbornelabs.bitcoin.xbt.scalacompat.samples
 
-import fr.acinq.bitcoin.scalacompat._
+import com.ashbornelabs.bitcoin.xbt.scalacompat._
 
 object KeysFromXpub extends App {
   /**
