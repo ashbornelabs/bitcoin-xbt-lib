@@ -3,7 +3,7 @@ package com.ashbornelabs.bitcoin.xbt.scalacompat.samples
 
 import com.ashbornelabs.bitcoin.xbt.scalacompat.{Crypto, MnemonicCode, Script}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
-import fr.acinq.bitcoin.{Base58, Base58Check}
+import com.ashbornelabs.bitcoin.xbt.{Base58, Base58Check}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet._
 import com.ashbornelabs.bitcoin.xbt.scalacompat.{Crypto, DeterministicWallet, MnemonicCode, Script}

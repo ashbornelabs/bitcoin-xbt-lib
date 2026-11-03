@@ -47,8 +47,8 @@ object ScriptTree {
 
   object Leaf {
     // @formatter:off
-    def apply(script: ByteVector): Leaf = Leaf(script, fr.acinq.bitcoin.Script.TAPROOT_LEAF_TAPSCRIPT)
-    def apply(script: Seq[ScriptElt]): Leaf = Leaf(script, fr.acinq.bitcoin.Script.TAPROOT_LEAF_TAPSCRIPT)
+    def apply(script: ByteVector): Leaf = Leaf(script, com.ashbornelabs.bitcoin.xbt.Script.TAPROOT_LEAF_TAPSCRIPT)
+    def apply(script: Seq[ScriptElt]): Leaf = Leaf(script, com.ashbornelabs.bitcoin.xbt.Script.TAPROOT_LEAF_TAPSCRIPT)
     def apply(script: Seq[ScriptElt], leafVersion: Int): Leaf = Leaf(Script.write(script), leafVersion)
     // @formatter:on
   }

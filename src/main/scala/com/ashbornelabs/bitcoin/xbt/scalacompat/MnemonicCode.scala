@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import scodec.bits.ByteVector
 
 import scala.jdk.CollectionConverters.{ListHasAsScala, SeqHasAsJava}
@@ -16,7 +16,7 @@ object MnemonicCode {
    * @param entropy input entropy
    * @return a list of mnemonic words that encodes the input entropy
    */
-  def toMnemonics(entropy: ByteVector): List[String] = bitcoin.MnemonicCode.toMnemonics(entropy.toArrayUnsafe).asScala.toList
+  def toMnemonics(entropy: ByteVector): List[String] = xbt.MnemonicCode.toMnemonics(entropy.toArrayUnsafe).asScala.toList
 
   /**
    * BIP39 entropy encoding.
@@ -25,17 +25,17 @@ object MnemonicCode {
    * @param wordlist word list (must be 2048 words long)
    * @return a list of mnemonic words that encodes the input entropy
    */
-  def toMnemonics(entropy: ByteVector, wordlist: Seq[String]): List[String] = bitcoin.MnemonicCode.toMnemonics(entropy.toArrayUnsafe, wordlist.asJava).asScala.toList
+  def toMnemonics(entropy: ByteVector, wordlist: Seq[String]): List[String] = xbt.MnemonicCode.toMnemonics(entropy.toArrayUnsafe, wordlist.asJava).asScala.toList
 
   /**
    * Verify that a mnemonic seed is valid using default BIP39 word list.
    */
-  def validate(mnemonics: String): Unit = bitcoin.MnemonicCode.validate(mnemonics)
+  def validate(mnemonics: String): Unit = xbt.MnemonicCode.validate(mnemonics)
 
   /**
    * Verify that a mnemonic seed is valid using default BIP39 word list.
    */
-  def validate(mnemonics: Seq[String]): Unit = bitcoin.MnemonicCode.validate(mnemonics.mkString(" "))
+  def validate(mnemonics: Seq[String]): Unit = xbt.MnemonicCode.validate(mnemonics.mkString(" "))
 
   /**
    * Verify that a mnemonic seed is valid.
@@ -43,7 +43,7 @@ object MnemonicCode {
    * @param mnemonics list of mnemonic words.
    * @param wordlist  word list (must be 2048 words long)
    */
-  def validate(mnemonics: Seq[String], wordlist: Seq[String]): Unit = bitcoin.MnemonicCode.validate(mnemonics.asJava, wordlist.asJava)
+  def validate(mnemonics: Seq[String], wordlist: Seq[String]): Unit = xbt.MnemonicCode.validate(mnemonics.asJava, wordlist.asJava)
 
   /**
    * BIP39 seed derivation.
@@ -52,7 +52,7 @@ object MnemonicCode {
    * @param passphrase passphrase
    * @return a seed derived from the mnemonic words and passphrase
    */
-  def toSeed(mnemonics: Seq[String], passphrase: String): ByteVector = ByteVector.view(bitcoin.MnemonicCode.toSeed(mnemonics.asJava, passphrase))
+  def toSeed(mnemonics: Seq[String], passphrase: String): ByteVector = ByteVector.view(xbt.MnemonicCode.toSeed(mnemonics.asJava, passphrase))
 
   /**
    * BIP39 seed derivation.
@@ -61,5 +61,5 @@ object MnemonicCode {
    * @param passphrase passphrase
    * @return a seed derived from the mnemonic words and passphrase
    */
-  def toSeed(mnemonics: String, passphrase: String): ByteVector = ByteVector.view(bitcoin.MnemonicCode.toSeed(mnemonics, passphrase))
+  def toSeed(mnemonics: String, passphrase: String): ByteVector = ByteVector.view(xbt.MnemonicCode.toSeed(mnemonics, passphrase))
 }

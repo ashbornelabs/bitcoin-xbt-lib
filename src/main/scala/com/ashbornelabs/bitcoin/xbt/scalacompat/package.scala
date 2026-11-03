@@ -1,8 +1,8 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt
 
-import fr.acinq.bitcoin
-import fr.acinq.bitcoin.{BitcoinError, SigHash}
+import com.ashbornelabs.bitcoin.xbt
+import com.ashbornelabs.bitcoin.xbt.{BitcoinError, SigHash}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import scodec.bits.ByteVector
@@ -53,11 +53,11 @@ package object scalacompat {
 
   def isAnyoneCanPay(sighashType: Int): Boolean = (sighashType & SigHash.SIGHASH_ANYONECANPAY) != 0
 
-  def isHashSingle(sighashType: Int): Boolean = (sighashType & 0x1f) == bitcoin.SigHash.SIGHASH_SINGLE
+  def isHashSingle(sighashType: Int): Boolean = (sighashType & 0x1f) == xbt.SigHash.SIGHASH_SINGLE
 
-  def isHashNone(sighashType: Int): Boolean = (sighashType & 0x1f) == bitcoin.SigHash.SIGHASH_NONE
+  def isHashNone(sighashType: Int): Boolean = (sighashType & 0x1f) == xbt.SigHash.SIGHASH_NONE
 
-  def computeP2PkhAddress(pub: PublicKey, chainHash: BlockHash): String = bitcoin.Bitcoin.computeP2PkhAddress(pub, chainHash)
+  def computeP2PkhAddress(pub: PublicKey, chainHash: BlockHash): String = xbt.Bitcoin.computeP2PkhAddress(pub, chainHash)
 
   def computeBIP44Address(pub: PublicKey, chainHash: BlockHash): String = computeP2PkhAddress(pub, chainHash)
 
@@ -66,7 +66,7 @@ package object scalacompat {
    * @param chainHash chain hash (i.e. hash of the genesis block of the chain we're on)
    * @return the p2swh-of-p2pkh address for this key). It is a Base58 address that is compatible with most bitcoin wallets
    */
-  def computeP2ShOfP2WpkhAddress(pub: PublicKey, chainHash: BlockHash): String = bitcoin.Bitcoin.computeP2ShOfP2WpkhAddress(pub, chainHash)
+  def computeP2ShOfP2WpkhAddress(pub: PublicKey, chainHash: BlockHash): String = xbt.Bitcoin.computeP2ShOfP2WpkhAddress(pub, chainHash)
 
   def computeBIP49Address(pub: PublicKey, chainHash: BlockHash): String = computeP2ShOfP2WpkhAddress(pub, chainHash)
 
@@ -76,7 +76,7 @@ package object scalacompat {
    * @return the BIP84 address for this key (i.e. the p2wpkh address for this key). It is a Bech32 address that will be
    *         understood only by native sewgit wallets
    */
-  def computeP2WpkhAddress(pub: PublicKey, chainHash: BlockHash): String = bitcoin.Bitcoin.computeP2WpkhAddress(pub, chainHash)
+  def computeP2WpkhAddress(pub: PublicKey, chainHash: BlockHash): String = xbt.Bitcoin.computeP2WpkhAddress(pub, chainHash)
 
   def computeBIP84Address(pub: PublicKey, chainHash: BlockHash): String = computeP2WpkhAddress(pub, chainHash)
 
@@ -94,7 +94,7 @@ package object scalacompat {
    */
   def computeScriptAddress(chainHash: BlockHash, script: ByteVector): Either[BitcoinError, String] = computeScriptAddress(chainHash, Script.parse(script))
 
-  def addressToPublicKeyScript(chainHash: BlockHash, address: String): Either[BitcoinError, Seq[ScriptElt]] = fr.acinq.bitcoin.Bitcoin.addressToPublicKeyScript(chainHash, address).map(_.asScala.map(kmp2scala).toList)
+  def addressToPublicKeyScript(chainHash: BlockHash, address: String): Either[BitcoinError, Seq[ScriptElt]] = com.ashbornelabs.bitcoin.xbt.Bitcoin.addressToPublicKeyScript(chainHash, address).map(_.asScala.map(kmp2scala).toList)
 
-  def addressFromPublicKeyScript(chainHash: BlockHash, script: Seq[ScriptElt]): Either[BitcoinError, String] = fr.acinq.bitcoin.Bitcoin.addressFromPublicKeyScript(chainHash, script.map(scala2kmp).asJava)
+  def addressFromPublicKeyScript(chainHash: BlockHash, script: Seq[ScriptElt]): Either[BitcoinError, String] = com.ashbornelabs.bitcoin.xbt.Bitcoin.addressFromPublicKeyScript(chainHash, script.map(scala2kmp).asJava)
 }

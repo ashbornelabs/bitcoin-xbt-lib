@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PublicKey, XonlyPublicKey}
 import scodec.bits.ByteVector
 
@@ -151,7 +151,7 @@ case class OP_INVALID(code: Int) extends ScriptElt
 object ScriptElt {
   // code -> ScriptElt
   def code2elt(code: Int): Option[ScriptElt] = {
-    bitcoin.ScriptEltMapping.code2elt.get(code) match {
+    xbt.ScriptEltMapping.code2elt.get(code) match {
       case null => None
       case elt => Some(KotlinUtils.kmp2scala(elt))
     }

@@ -10,7 +10,7 @@ import scala.annotation.tailrec
  * see https://github.com/bitcoin/bips/blob/master/bip-0069.mediawiki
  */
 object LexicographicalOrdering {
-  def isLessThan(a: ByteVector, b: ByteVector): Boolean = fr.acinq.bitcoin.LexicographicalOrdering.isLessThan(a.toArrayUnsafe, b.toArrayUnsafe)
+  def isLessThan(a: ByteVector, b: ByteVector): Boolean = com.ashbornelabs.bitcoin.xbt.LexicographicalOrdering.isLessThan(a.toArrayUnsafe, b.toArrayUnsafe)
 
   def isLessThan(a: OutPoint, b: OutPoint): Boolean = {
     if (a.txid == b.txid) a.index < b.index

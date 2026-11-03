@@ -2,8 +2,8 @@
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import com.google.common.io.BaseEncoding
-import fr.acinq.bitcoin.Base58.Prefix
-import fr.acinq.bitcoin.Base58Check
+import com.ashbornelabs.bitcoin.xbt.Base58.Prefix
+import com.ashbornelabs.bitcoin.xbt.Base58Check
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import org.scalatest.FlatSpec
 import scodec.bits._

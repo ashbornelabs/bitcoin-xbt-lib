@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.ScriptFlags
+import com.ashbornelabs.bitcoin.xbt.ScriptFlags
 import org.scalatest.FlatSpec
 
 class PuzzleSpec extends FlatSpec {

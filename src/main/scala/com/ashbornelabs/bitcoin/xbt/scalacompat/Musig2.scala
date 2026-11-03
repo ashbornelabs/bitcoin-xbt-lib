@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.crypto.musig2
+import com.ashbornelabs.bitcoin.xbt.crypto.musig2
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey, XonlyPublicKey}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import fr.acinq.secp256k1.Secp256k1
@@ -16,7 +16,7 @@ object Musig2 {
    * This nonce must never be persisted or reused across signing sessions.
    */
   case class SecretNonce(inner: musig2.SecretNonce) {
-    def consume[T](f: Array[Byte] => T): Either[Throwable, T] = inner.consume$bitcoin_kmp((bytes: Array[Byte]) => f(bytes))
+    def consume[T](f: Array[Byte] => T): Either[Throwable, T] = inner.consume$bitcoin_xbt_kmp((bytes: Array[Byte]) => f(bytes))
   }
 
   /**

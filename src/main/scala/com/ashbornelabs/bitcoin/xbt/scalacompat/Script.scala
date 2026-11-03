@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PublicKey, XonlyPublicKey}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import scodec.bits.ByteVector
@@ -10,40 +10,40 @@ import scala.jdk.CollectionConverters.{ListHasAsScala, SeqHasAsJava}
 
 object Script {
 
-  import fr.acinq.bitcoin.ScriptFlags._
+  import com.ashbornelabs.bitcoin.xbt.ScriptFlags._
 
   def parse(blob: ByteVector): List[ScriptElt] = parse(blob.toArrayUnsafe)
 
-  def parse(blob: Array[Byte]): List[ScriptElt] = bitcoin.Script.parse(blob).asScala.toList.map(kmp2scala)
+  def parse(blob: Array[Byte]): List[ScriptElt] = xbt.Script.parse(blob).asScala.toList.map(kmp2scala)
 
-  def write(script: Seq[ScriptElt]): ByteVector = ByteVector.view(bitcoin.Script.write(script.map(scala2kmp).asJava))
+  def write(script: Seq[ScriptElt]): ByteVector = ByteVector.view(xbt.Script.write(script.map(scala2kmp).asJava))
 
-  def encodeNumber(value: Long): ByteVector = ByteVector.view(bitcoin.Script.encodeNumber(value).toByteArray)
+  def encodeNumber(value: Long): ByteVector = ByteVector.view(xbt.Script.encodeNumber(value).toByteArray)
 
-  def decodeNumber(input: ByteVector, checkMinimalEncoding: Boolean, maximumSize: Int = 4): Long = bitcoin.Script.decodeNumber(input.toArrayUnsafe, checkMinimalEncoding, maximumSize)
+  def decodeNumber(input: ByteVector, checkMinimalEncoding: Boolean, maximumSize: Int = 4): Long = xbt.Script.decodeNumber(input.toArrayUnsafe, checkMinimalEncoding, maximumSize)
 
-  def isSimpleValue(op: ScriptElt): Boolean = bitcoin.Script.isSimpleValue(op)
+  def isSimpleValue(op: ScriptElt): Boolean = xbt.Script.isSimpleValue(op)
 
-  def simpleValue(op: ScriptElt): Byte = bitcoin.Script.simpleValue(op)
+  def simpleValue(op: ScriptElt): Byte = xbt.Script.simpleValue(op)
 
-  def isPushOnly(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPushOnly(script.map(scala2kmp).asJava)
+  def isPushOnly(script: Seq[ScriptElt]): Boolean = xbt.Script.isPushOnly(script.map(scala2kmp).asJava)
 
-  def isPayToScript(script: ByteVector): Boolean = bitcoin.Script.isPayToScript(script.toArrayUnsafe)
+  def isPayToScript(script: ByteVector): Boolean = xbt.Script.isPayToScript(script.toArrayUnsafe)
 
-  def isNativeWitnessScript(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isNativeWitnessScript(script.map(scala2kmp).asJava)
+  def isNativeWitnessScript(script: Seq[ScriptElt]): Boolean = xbt.Script.isNativeWitnessScript(script.map(scala2kmp).asJava)
 
   def isNativeWitnessScript(script: ByteVector): Boolean = isNativeWitnessScript(parse(script))
 
-  def getWitnessVersion(script: Seq[ScriptElt]): Option[Int] = bitcoin.Script.getWitnessVersion(script.map(scala2kmp).asJava) match {
+  def getWitnessVersion(script: Seq[ScriptElt]): Option[Int] = xbt.Script.getWitnessVersion(script.map(scala2kmp).asJava) match {
     case null => None
     case version => Some(version)
   }
 
   def getWitnessVersion(script: ByteVector): Option[Int] = getWitnessVersion(parse(script))
 
-  def checkLockTime(lockTime: Long, tx: Transaction, inputIndex: Int): Boolean = bitcoin.Script.INSTANCE.checkLockTime(lockTime, tx, inputIndex)
+  def checkLockTime(lockTime: Long, tx: Transaction, inputIndex: Int): Boolean = xbt.Script.INSTANCE.checkLockTime(lockTime, tx, inputIndex)
 
-  def checkSequence(sequence: Long, tx: Transaction, inputIndex: Int): Boolean = bitcoin.Script.INSTANCE.checkSequence(sequence, tx, inputIndex)
+  def checkSequence(sequence: Long, tx: Transaction, inputIndex: Int): Boolean = xbt.Script.INSTANCE.checkSequence(sequence, tx, inputIndex)
 
   /**
    * Execution context of a tx script. A script is always executed in the "context" of a transaction that is being
@@ -64,7 +64,7 @@ object Script {
    */
   class Runner(context: Context, scriptFlag: Int = MANDATORY_SCRIPT_VERIFY_FLAGS) {
 
-    private val runner = new bitcoin.Script.Runner(new bitcoin.Script.Context(context.tx, context.inputIndex, context.amount, context.prevouts.map(scala2kmp).asJava), scriptFlag)
+    private val runner = new xbt.Script.Runner(new xbt.Script.Context(context.tx, context.inputIndex, context.amount, context.prevouts.map(scala2kmp).asJava), scriptFlag)
 
     def verifyWitnessProgram(witness: ScriptWitness, witnessVersion: Long, program: ByteVector, isP2sh: Boolean = false): Unit = runner.verifyWitnessProgram(witness, witnessVersion, program.toArrayUnsafe, isP2sh)
 
@@ -94,20 +94,20 @@ object Script {
    *                as required signatures)
    * @return a multisig redeem script
    */
-  def createMultiSigMofN(m: Int, pubkeys: Seq[PublicKey]): Seq[ScriptElt] = bitcoin.Script.createMultiSigMofN(m, pubkeys.map(_.pub).asJava).asScala.map(kmp2scala).toList
+  def createMultiSigMofN(m: Int, pubkeys: Seq[PublicKey]): Seq[ScriptElt] = xbt.Script.createMultiSigMofN(m, pubkeys.map(_.pub).asJava).asScala.map(kmp2scala).toList
 
   /**
    * @param pubKeys are the public keys signatures will be checked against.
    * @param sigs    are the signatures for a subset of the public keys.
    * @return script witness for the pay-to-witness-script-hash script containing a multisig script.
    */
-  def witnessMultiSigMofN(pubKeys: Seq[PublicKey], sigs: Seq[ByteVector]): ScriptWitness = bitcoin.Script.witnessMultiSigMofN(pubKeys.map(_.pub).asJava, sigs.map(scala2kmp).asJava)
+  def witnessMultiSigMofN(pubKeys: Seq[PublicKey], sigs: Seq[ByteVector]): ScriptWitness = xbt.Script.witnessMultiSigMofN(pubKeys.map(_.pub).asJava, sigs.map(scala2kmp).asJava)
 
   /**
    * @param pubKeyHash public key hash
    * @return a pay-to-public-key-hash script
    */
-  def pay2pkh(pubKeyHash: ByteVector): Seq[ScriptElt] = bitcoin.Script.pay2pkh(pubKeyHash.toArrayUnsafe).asScala.map(kmp2scala).toList
+  def pay2pkh(pubKeyHash: ByteVector): Seq[ScriptElt] = xbt.Script.pay2pkh(pubKeyHash.toArrayUnsafe).asScala.map(kmp2scala).toList
 
   /**
    * @param pubKey public key
@@ -115,7 +115,7 @@ object Script {
    */
   def pay2pkh(pubKey: PublicKey): Seq[ScriptElt] = pay2pkh(pubKey.hash160)
 
-  def isPay2pkh(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPay2pkh(script.map(scala2kmp).asJava)
+  def isPay2pkh(script: Seq[ScriptElt]): Boolean = xbt.Script.isPay2pkh(script.map(scala2kmp).asJava)
 
   /**
    * @param script bitcoin script
@@ -127,9 +127,9 @@ object Script {
    * @param script bitcoin script
    * @return a pay-to-script script
    */
-  def pay2sh(script: ByteVector): Seq[ScriptElt] = bitcoin.Script.pay2sh(script.toArrayUnsafe).asScala.map(kmp2scala).toList
+  def pay2sh(script: ByteVector): Seq[ScriptElt] = xbt.Script.pay2sh(script.toArrayUnsafe).asScala.map(kmp2scala).toList
 
-  def isPay2sh(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPay2sh(script.map(scala2kmp).asJava)
+  def isPay2sh(script: Seq[ScriptElt]): Boolean = xbt.Script.isPay2sh(script.map(scala2kmp).asJava)
 
   /**
    * @param script bitcoin script
@@ -141,15 +141,15 @@ object Script {
    * @param script bitcoin script
    * @return a pay-to-witness-script script
    */
-  def pay2wsh(script: ByteVector): Seq[ScriptElt] = bitcoin.Script.pay2wsh(script.toArrayUnsafe).asScala.map(kmp2scala).toList
+  def pay2wsh(script: ByteVector): Seq[ScriptElt] = xbt.Script.pay2wsh(script.toArrayUnsafe).asScala.map(kmp2scala).toList
 
-  def isPay2wsh(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPay2wsh(script.map(scala2kmp).asJava)
+  def isPay2wsh(script: Seq[ScriptElt]): Boolean = xbt.Script.isPay2wsh(script.map(scala2kmp).asJava)
 
   /**
    * @param pubKeyHash public key hash
    * @return a pay-to-witness-public-key-hash script
    */
-  def pay2wpkh(pubKeyHash: ByteVector): Seq[ScriptElt] = bitcoin.Script.pay2wpkh(pubKeyHash.toArrayUnsafe).asScala.map(kmp2scala).toList
+  def pay2wpkh(pubKeyHash: ByteVector): Seq[ScriptElt] = xbt.Script.pay2wpkh(pubKeyHash.toArrayUnsafe).asScala.map(kmp2scala).toList
 
   /**
    * @param pubKey public key
@@ -157,20 +157,20 @@ object Script {
    */
   def pay2wpkh(pubKey: PublicKey): Seq[ScriptElt] = pay2wpkh(pubKey.hash160)
 
-  def isPay2wpkh(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPay2wpkh(script.map(scala2kmp).asJava)
+  def isPay2wpkh(script: Seq[ScriptElt]): Boolean = xbt.Script.isPay2wpkh(script.map(scala2kmp).asJava)
 
   /**
    * @param pubKey public key
    * @param sig    signature matching the public key
    * @return script witness for the corresponding pay-to-witness-public-key-hash script
    */
-  def witnessPay2wpkh(pubKey: PublicKey, sig: ByteVector): ScriptWitness = bitcoin.Script.witnessPay2wpkh(pubKey, sig)
+  def witnessPay2wpkh(pubKey: PublicKey, sig: ByteVector): ScriptWitness = xbt.Script.witnessPay2wpkh(pubKey, sig)
 
   /**
    * @param internalKey internal public key that will be tweaked with the [scripts] provided.
    * @param scriptsRoot spending scripts that can be used instead of key-path spending.
    */
-  def pay2tr(internalKey: XonlyPublicKey, scriptsRoot: ByteVector32): Seq[ScriptElt] = bitcoin.Script.pay2tr(internalKey.pub, scriptsRoot).asScala.map(kmp2scala).toList
+  def pay2tr(internalKey: XonlyPublicKey, scriptsRoot: ByteVector32): Seq[ScriptElt] = xbt.Script.pay2tr(internalKey.pub, scriptsRoot).asScala.map(kmp2scala).toList
 
   /**
    * @param internalKey internal public key that will be tweaked with the [scripts] provided.
@@ -182,11 +182,11 @@ object Script {
    * @param internalKey  internal public key that will be tweaked with the provided [taprootTweak].
    * @param taprootTweak tweak to apply to [internalKey].
    */
-  def pay2tr(internalKey: XonlyPublicKey, taprootTweak: Crypto.TaprootTweak): Seq[ScriptElt] = bitcoin.Script.pay2tr(internalKey.pub, taprootTweak).asScala.map(kmp2scala).toList
+  def pay2tr(internalKey: XonlyPublicKey, taprootTweak: Crypto.TaprootTweak): Seq[ScriptElt] = xbt.Script.pay2tr(internalKey.pub, taprootTweak).asScala.map(kmp2scala).toList
 
-  def isPay2tr(script: Seq[ScriptElt]): Boolean = bitcoin.Script.isPay2tr(script.map(scala2kmp).asJava)
+  def isPay2tr(script: Seq[ScriptElt]): Boolean = xbt.Script.isPay2tr(script.map(scala2kmp).asJava)
 
-  def pay2trOutputKey(script: Seq[ScriptElt]): Option[XonlyPublicKey] = bitcoin.Script.pay2trOutputKey(script.map(scala2kmp).asJava) match {
+  def pay2trOutputKey(script: Seq[ScriptElt]): Option[XonlyPublicKey] = xbt.Script.pay2trOutputKey(script.map(scala2kmp).asJava) match {
     case null => None
     case outputKey => Some(kmp2scala(outputKey))
   }
@@ -194,7 +194,7 @@ object Script {
   def pay2trOutputKey(script: ByteVector): Option[XonlyPublicKey] = pay2trOutputKey(parse(script))
 
   /** NB: callers must ensure that they use the correct taproot tweak when generating their signature. */
-  def witnessKeyPathPay2tr(sig: ByteVector64, sighash: Int = bitcoin.SigHash.SIGHASH_DEFAULT): ScriptWitness = bitcoin.Script.witnessKeyPathPay2tr(sig, sighash)
+  def witnessKeyPathPay2tr(sig: ByteVector64, sighash: Int = xbt.SigHash.SIGHASH_DEFAULT): ScriptWitness = xbt.Script.witnessKeyPathPay2tr(sig, sighash)
 
   /**
    * @param internalKey taproot internal public key.
@@ -202,12 +202,12 @@ object Script {
    * @param witness     witness for the spent [script].
    * @param scriptTree  tapscript tree.
    */
-  def witnessScriptPathPay2tr(internalKey: XonlyPublicKey, script: ScriptTree.Leaf, witness: ScriptWitness, scriptTree: ScriptTree): ScriptWitness = bitcoin.Script.witnessScriptPathPay2tr(internalKey.pub, scala2kmp(script), witness, scala2kmp(scriptTree))
+  def witnessScriptPathPay2tr(internalKey: XonlyPublicKey, script: ScriptTree.Leaf, witness: ScriptWitness, scriptTree: ScriptTree): ScriptWitness = xbt.Script.witnessScriptPathPay2tr(internalKey.pub, scala2kmp(script), witness, scala2kmp(scriptTree))
 
   /** Standard P2A (pay-to-anchor) output. */
-  val pay2anchor: Seq[ScriptElt] = bitcoin.Script.pay2anchor.asScala.map(kmp2scala).toList
+  val pay2anchor: Seq[ScriptElt] = xbt.Script.pay2anchor.asScala.map(kmp2scala).toList
 
   /** An empty witness script must be used to spend [[pay2anchor]] outputs. */
-  val witnessPay2anchor: ScriptWitness = bitcoin.Script.witnessPay2anchor
+  val witnessPay2anchor: ScriptWitness = xbt.Script.witnessPay2anchor
 
 }

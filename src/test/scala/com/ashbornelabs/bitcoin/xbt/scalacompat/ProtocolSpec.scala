@@ -4,7 +4,7 @@ package com.ashbornelabs.bitcoin.xbt.scalacompat
 import java.math.BigInteger
 import java.net.InetAddress
 import com.google.common.io.ByteStreams
-import fr.acinq.bitcoin.{Base58, Base58Check}
+import com.ashbornelabs.bitcoin.xbt.{Base58, Base58Check}
 import org.scalatest.FlatSpec
 import scodec.bits._
 

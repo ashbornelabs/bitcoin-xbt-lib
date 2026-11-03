@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin.Base58
+import com.ashbornelabs.bitcoin.xbt.Base58
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet.KeyPath
 import org.scalatest.FunSuite

@@ -1,9 +1,9 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
-import fr.acinq.bitcoin.{Base58, Base58Check, ScriptFlags, SigHash, SigVersion}
+import com.ashbornelabs.bitcoin.xbt.{Base58, Base58Check, ScriptFlags, SigHash, SigVersion}
 import org.scalatest.{FunSuite, Matchers}
 import scodec.bits._
 
@@ -18,7 +18,7 @@ class TransactionSpec extends FunSuite with Matchers {
   test("read transaction without inputs in non-witness format") {
     val hex = hex"020000000002d3dff505000000001976a914d0c59903c5bac2868760e90fd521a4665aa7652088ac00e1f5050000000017a9143545e6e33b832c47050f24d3eeb93c9c03948bc787b32e1300"
     assertThrows[Throwable](Transaction.read(hex.toArray))
-    val tx = Transaction.read(hex.toArray, Protocol.PROTOCOL_VERSION | bitcoin.Transaction.SERIALIZE_TRANSACTION_NO_WITNESS)
+    val tx = Transaction.read(hex.toArray, Protocol.PROTOCOL_VERSION | xbt.Transaction.SERIALIZE_TRANSACTION_NO_WITNESS)
     assert(tx.version === 2)
     assert(tx.txIn.isEmpty)
     assert(tx.txid === TxId.fromValidHex("062d74b3c6183147c30a02addf3c8cd0df10a049ced5677247edd8f114ddb6fb"))

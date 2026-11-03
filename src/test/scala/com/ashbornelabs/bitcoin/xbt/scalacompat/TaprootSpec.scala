@@ -4,7 +4,7 @@ package com.ashbornelabs.bitcoin.xbt.scalacompat
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.TaprootTweak.KeyPathTweak
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey, TaprootTweak}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
-import fr.acinq.bitcoin.{Bech32, ScriptFlags, SigHash, SigVersion}
+import com.ashbornelabs.bitcoin.xbt.{Bech32, ScriptFlags, SigHash, SigVersion}
 import fr.acinq.secp256k1.Secp256k1
 import org.scalatest.FunSuite
 import scodec.bits.ByteVector
@@ -75,7 +75,7 @@ class TaprootSpec extends FunSuite {
     val Right(outputScript) = addressToPublicKeyScript(Block.Testnet4GenesisBlock.hash, "tb1pn3g330w4n5eut7d4vxq0pp303267qc6vg8d2e0ctjuqre06gs3yqnc5yx0")
     val tx1 = Transaction(
       2,
-      TxIn(OutPoint(tx, 1), ByteVector.empty, fr.acinq.bitcoin.TxIn.SEQUENCE_FINAL) :: Nil,
+      TxIn(OutPoint(tx, 1), ByteVector.empty, com.ashbornelabs.bitcoin.xbt.TxIn.SEQUENCE_FINAL) :: Nil,
       TxOut(49258.sat, outputScript) :: Nil,
       0
     )
@@ -166,7 +166,7 @@ class TaprootSpec extends FunSuite {
     // create an unsigned transaction
     val tmp = Transaction(
       version = 2,
-      txIn = TxIn(OutPoint(fundingTx, 0), ByteVector.empty, fr.acinq.bitcoin.TxIn.SEQUENCE_FINAL) :: Nil,
+      txIn = TxIn(OutPoint(fundingTx, 0), ByteVector.empty, com.ashbornelabs.bitcoin.xbt.TxIn.SEQUENCE_FINAL) :: Nil,
       txOut = TxOut(fundingTx.txOut.head.amount - Satoshi(5000), addressToPublicKeyScript(Block.RegtestGenesisBlock.hash, "bcrt1qdtu5cwyngza8hw8s5uk2erlrkh8ceh3msp768v").toOption.get) :: Nil,
       lockTime = 0
     )
@@ -233,7 +233,7 @@ class TaprootSpec extends FunSuite {
     val tx = {
       val tmp = Transaction(
         version = 2,
-        txIn = Seq(TxIn(OutPoint(fundingTx, 0), ByteVector.empty, fr.acinq.bitcoin.TxIn.SEQUENCE_FINAL)),
+        txIn = Seq(TxIn(OutPoint(fundingTx, 0), ByteVector.empty, com.ashbornelabs.bitcoin.xbt.TxIn.SEQUENCE_FINAL)),
         txOut = Seq(TxOut(fundingTx.txOut.head.amount - Satoshi(5000), sweepPublicKeyScript)),
         lockTime = 0
       )
