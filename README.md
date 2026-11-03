@@ -45,6 +45,7 @@ This is a simple scala library which implements most of the bitcoin protocol:
 * BIP 173 (Base32 address format for native v0-16 witness outputs)
 * BIP 174 (Partially Signed Bitcoin Transaction Format)
 * BIP 350 (Bech32m format)
+* XBT unified signature hash, for every script type
 
 It is actually a wrapper on top of [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp), the Kotlin XBT library, that makes it easier to use in scala projects.
 All the features are implemented in Kotlin in the `com.ashbornelabs.bitcoin.xbt` namespace and the scala wrappers can be found in the `com.ashbornelabs.bitcoin.xbt.scalacompat` namespace.
@@ -62,6 +63,8 @@ Our goal is not to re-implement a full Bitcoin node but to build a library that 
 * [X] Passing core reference tests (scripts & transactions)
 * [X] Passing core reference segwit tests
 * [X] Passing core reference psbt tests
+* [X] Passing Knots reference tests for the unified signature hash
+* [X] Verifying real XBT mainnet transactions signed with the unified signature hash
 
 ## Configuring maven/sbt
 
