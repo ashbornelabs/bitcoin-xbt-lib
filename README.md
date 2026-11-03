@@ -428,6 +428,31 @@ This sample demonstrates how to serialize, create and verify a P2WSH transaction
     // this tx was published on testnet as 4807cb10f50df84acd7766245133f902d22d91b7e8bfe77c4bbcb0cf9b017a86
 ```
 
+#### Signing with the XBT unified signature hash
+
+The unified signature hash commits to every output spent by the transaction, so the signing methods take all of them. Signatures that do not set `SIGHASH_UNIFIED` keep signing the legacy signature hash.
+
+```scala
+import com.ashbornelabs.bitcoin.xbt.{ScriptFlags, SigHash, SigVersion}
+import com.ashbornelabs.bitcoin.xbt.scalacompat._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
+
+val privateKey = PrivateKey(ByteVector32.fromValidHex("0101010101010101010101010101010101010101010101010101010101010101"))
+val publicKey = privateKey.publicKey
+val spent = TxOut(Satoshi(100_000), Script.pay2wpkh(publicKey))
+val outPoint = OutPoint(TxHash(ByteVector32.fromValidHex("8f2e1e7c0d8b6a5c4b3a29180716f5e4d3c2b1a09f8e7d6c5b4a392817160504")), 0)
+val unsigned = Transaction(
+  version = 2,
+  txIn = TxIn(outPoint, ByteVector.empty, sequence = 0xfffffffdL) :: Nil,
+  txOut = TxOut(Satoshi(99_000), Script.pay2wpkh(publicKey)) :: Nil,
+  lockTime = 0
+)
+// SIGHASH_ALL_UNIFIED (0x21) commits to every spent output: pass them all.
+val sig = unsigned.signInput(0, Script.pay2pkh(publicKey), SigHash.SIGHASH_ALL_UNIFIED, Seq(spent), SigVersion.SIGVERSION_WITNESS_V0, privateKey)
+val signed = unsigned.updateWitness(0, Script.witnessPay2wpkh(publicKey, sig))
+signed.correctlySpends(Map(outPoint -> spent), ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS)
+```
+
 ### Wallet features
 
 Bitcoin-lib provides and simple and complete implementation of BIP32 and BIP39.
