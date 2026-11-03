@@ -27,7 +27,7 @@ The XBT rules are implemented in [bitcoin-xbt-kmp](https://github.com/ashbornela
 | Coordinates | `com.ashbornelabs:bitcoin-xbt-lib_2.13`. |
 | Kotlin library | The library wraps `bitcoin-xbt-kmp` (`com.ashbornelabs.bitcoin.xbt`) instead of ACINQ's bitcoin-kmp, so it applies the XBT rules: `ScriptFlags.MANDATORY_SCRIPT_VERIFY_FLAGS` includes the unified signature hash and `ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS` the BIP 110 rules. |
 | Chains | `Block.LivenetGenesisBlock`, `Block.Testnet4GenesisBlock` and `Block.RegtestGenesisBlock`. Testnet3 and signet are removed. |
-| Signatures | `Transaction.hashForSigningUnified`, and `signInput` and `signInputCompact` overloads that take every spent output, to sign with `SIGHASH_UNIFIED`. `isUnified` tells whether a sighash type sets it. |
+| Signatures | `Transaction.hashForSigningUnified`, and `signInput` and `signInputCompact` overloads that take every spent output, to sign with `SIGHASH_UNIFIED`. `isUnified` tells whether a sighash type sets it. The MuSig2 taproot functions take a `sighashType`, so the key path can be signed with it too. |
 
 The rest of the API keeps the names and signatures of bitcoin-lib. Block headers, consensus parameters and PSBTs have no Scala wrapper: use them from `bitcoin-xbt-kmp`, which this library depends on.
 

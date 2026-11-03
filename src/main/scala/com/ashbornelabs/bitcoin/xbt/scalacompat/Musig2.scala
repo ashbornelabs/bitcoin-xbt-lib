@@ -1,6 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
+import com.ashbornelabs.bitcoin.xbt.SigHash
 import com.ashbornelabs.bitcoin.xbt.crypto.musig2
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey, XonlyPublicKey}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
@@ -115,9 +116,12 @@ object Musig2 {
    * @param secretNonce    secret nonce of the signing participant.
    * @param publicNonces   public nonces of all participants of the musig2 session.
    * @param scriptTree_opt tapscript tree of the taproot input, if it has script paths.
+   * @param sighashType    signature hash type, which every participant must use. With SIGHASH_UNIFIED, the
+   *                       signature commits to the unified signature hash and is not valid on the SHA256d chain. Any type
+   *                       other than SIGHASH_DEFAULT must be appended to the aggregated signature.
    */
-  def signTaprootInput(privateKey: PrivateKey, tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], secretNonce: SecretNonce, publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree]): Either[Throwable, ByteVector32] = {
-    musig2.Musig2.signTaprootInput(privateKey, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, secretNonce.inner, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull).map(kmp2scala)
+  def signTaprootInput(privateKey: PrivateKey, tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], secretNonce: SecretNonce, publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree], sighashType: Int = SigHash.SIGHASH_DEFAULT): Either[Throwable, ByteVector32] = {
+    musig2.Musig2.signTaprootInput(privateKey, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, secretNonce.inner, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull, sighashType).map(kmp2scala)
   }
 
   /**
@@ -132,10 +136,11 @@ object Musig2 {
    * @param publicKeys     public keys of all participants of the musig2 session: callers must verify that all public keys are valid.
    * @param publicNonces   public nonces of all participants of the musig2 session.
    * @param scriptTree_opt tapscript tree of the taproot input, if it has script paths.
+   * @param sighashType    signature hash type, which every participant must use: see [[signTaprootInput]].
    * @return true if the partial signature is valid.
    */
-  def verifyTaprootSignature(partialSig: ByteVector32, nonce: IndividualNonce, publicKey: PublicKey, tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree]): Boolean = {
-    musig2.Musig2.verify(partialSig, new musig2.IndividualNonce(nonce.data.toArrayUnsafe), publicKey, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull)
+  def verifyTaprootSignature(partialSig: ByteVector32, nonce: IndividualNonce, publicKey: PublicKey, tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree], sighashType: Int = SigHash.SIGHASH_DEFAULT): Boolean = {
+    musig2.Musig2.verify(partialSig, new musig2.IndividualNonce(nonce.data.toArrayUnsafe), publicKey, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull, sighashType)
   }
 
   /**
@@ -148,9 +153,10 @@ object Musig2 {
    * @param publicKeys     public keys of all participants of the musig2 session: callers must verify that all public keys are valid.
    * @param publicNonces   public nonces of all participants of the musig2 session.
    * @param scriptTree_opt tapscript tree of the taproot input, if it has script paths.
+   * @param sighashType    signature hash type, which every participant must use: see [[signTaprootInput]].
    */
-  def aggregateTaprootSignatures(partialSigs: Seq[ByteVector32], tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree]): Either[Throwable, ByteVector64] = {
-    musig2.Musig2.aggregateTaprootSignatures(partialSigs.map(scala2kmp).asJava, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull).map(kmp2scala)
+  def aggregateTaprootSignatures(partialSigs: Seq[ByteVector32], tx: Transaction, inputIndex: Int, inputs: Seq[TxOut], publicKeys: Seq[PublicKey], publicNonces: Seq[IndividualNonce], scriptTree_opt: Option[ScriptTree], sighashType: Int = SigHash.SIGHASH_DEFAULT): Either[Throwable, ByteVector64] = {
+    musig2.Musig2.aggregateTaprootSignatures(partialSigs.map(scala2kmp).asJava, tx, inputIndex, inputs.map(scala2kmp).asJava, publicKeys.map(scala2kmp).asJava, publicNonces.map(n => new musig2.IndividualNonce(n.data.toArrayUnsafe)).asJava, scriptTree_opt.map(scala2kmp).orNull, sighashType).map(kmp2scala)
   }
 
 }
