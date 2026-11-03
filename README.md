@@ -530,3 +530,9 @@ mnemonics: List[String] = List(jelly, better, achieve, collect, unaware, mountai
 scala> val seed = toSeed(mnemonics, "TREZOR")
 seed: scodec.bits.ByteVector = ByteVector(64 bytes, 0xb5b6d0127db1a9d2226af0c3346031d77af31e918dba64287a1b44b8ebf63cdd52676f672a290aae502472cf2d602c051f3e6f18055e84e4c43897fc4e51a6ff)
 ```
+
+## License
+
+bitcoin-xbt-lib is released under the [Apache License 2.0](LICENSE). It is a fork of [bitcoin-lib](https://github.com/ACINQ/bitcoin-lib), Copyright 2014 ACINQ SAS, and includes test data taken from [Bitcoin Knots](https://github.com/bitcoinknots/bitcoin), released under the MIT License. [NOTICE](NOTICE) holds these attributions and the license of Bitcoin Knots. Source files modified by Ashborne Labs carry a notice saying so.
+
+This fork is maintained by Ashborne Labs. It is not affiliated with or endorsed by ACINQ or the Bitcoin Knots project.
