@@ -2,7 +2,6 @@
 package com.ashbornelabs.bitcoin.xbt
 
 import com.ashbornelabs.bitcoin.xbt
-import com.ashbornelabs.bitcoin.xbt.{BitcoinError, SigHash}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PublicKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import scodec.bits.ByteVector
