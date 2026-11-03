@@ -7,6 +7,30 @@
 
 Fork of [ACINQ/bitcoin-lib](https://github.com/ACINQ/bitcoin-lib) for the Bitcoin BLAKE2b (XBT) chain.
 
+## About XBT
+
+Bitcoin BLAKE2b (XBT) shares Bitcoin's history up to block 961,639 and then follows the consensus rules of [Bitcoin Knots](https://github.com/bitcoinknots/bitcoin) with the BLAKE2b fork. From block 961,640 on mainnet:
+
+* blocks are mined with BLAKE2b proof-of-work instead of SHA256d, and use a 164-byte version 2 header;
+* signatures can opt in to a unified signature hash (`SIGHASH_UNIFIED`, `0x20`): they are not valid on the SHA256d chain, which protects transactions against replay;
+* the BIP 110 reduced data rules (RDTS) apply until they expire.
+
+Addresses, key derivation paths, BIP 39 mnemonics and secp256k1 signatures are the same as in Bitcoin.
+
+The XBT rules are implemented in [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp), which follows Bitcoin Knots tag `v29.4.3.knots20260508`. Its README lists the parameters of each network.
+
+## Changes from bitcoin-lib
+
+| Area | Change |
+|---|---|
+| Package | `fr.acinq.bitcoin.scalacompat` is now `com.ashbornelabs.bitcoin.xbt.scalacompat`. |
+| Coordinates | `com.ashbornelabs:bitcoin-xbt-lib_2.13`. |
+| Kotlin library | The library wraps `bitcoin-xbt-kmp` (`com.ashbornelabs.bitcoin.xbt`) instead of ACINQ's bitcoin-kmp, so it applies the XBT rules: `ScriptFlags.MANDATORY_SCRIPT_VERIFY_FLAGS` includes the unified signature hash and `ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS` the BIP 110 rules. |
+| Chains | `Block.LivenetGenesisBlock`, `Block.Testnet4GenesisBlock` and `Block.RegtestGenesisBlock`. Testnet3 and signet are removed. |
+| Signatures | `Transaction.hashForSigningUnified`, and `signInput` and `signInputCompact` overloads that take every spent output, to sign with `SIGHASH_UNIFIED`. `isUnified` tells whether a sighash type sets it. |
+
+The rest of the API keeps the names and signatures of bitcoin-lib. Block headers, consensus parameters and PSBTs have no Scala wrapper: use them from `bitcoin-xbt-kmp`, which this library depends on.
+
 ## Overview
 
 This is a simple scala library which implements most of the bitcoin protocol:
@@ -21,13 +45,14 @@ This is a simple scala library which implements most of the bitcoin protocol:
 * BIP 173 (Base32 address format for native v0-16 witness outputs)
 * BIP 174 (Partially Signed Bitcoin Transaction Format)
 * BIP 350 (Bech32m format)
+* XBT unified signature hash, for every script type
 
 It is actually a wrapper on top of [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp), the Kotlin XBT library, that makes it easier to use in scala projects.
 All the features are implemented in Kotlin in the `com.ashbornelabs.bitcoin.xbt` namespace and the scala wrappers can be found in the `com.ashbornelabs.bitcoin.xbt.scalacompat` namespace.
 
 ## Objectives
 
-Our goal is not to re-implement a full Bitcoin node but to build a library that can be used to build applications that rely on bitcoind to interface with the Bitcoin network (to retrieve and index transactions and blocks, for example...). We use it very often to build quick prototypes and test new ideas. Besides, some parts of the protocol are fairly simple and "safe" to re-implement (BIP32/BIP39 for example), especially for indexing/analysis purposes. And, of course, we use it for our own work on Lightning (see <https://github.com/ACINQ/eclair>).
+Our goal is not to re-implement a full Bitcoin node but to build a library that can be used to build applications that rely on bitcoind to interface with the Bitcoin network (to retrieve and index transactions and blocks, for example...). We use it very often to build quick prototypes and test new ideas. Besides, some parts of the protocol are fairly simple and "safe" to re-implement (BIP32/BIP39 for example), especially for indexing/analysis purposes. ACINQ uses the original library in its Lightning node, <https://github.com/ACINQ/eclair>.
 
 ## Status
 
@@ -38,10 +63,12 @@ Our goal is not to re-implement a full Bitcoin node but to build a library that 
 * [X] Passing core reference tests (scripts & transactions)
 * [X] Passing core reference segwit tests
 * [X] Passing core reference psbt tests
+* [X] Passing Knots reference tests for the unified signature hash
+* [X] Verifying real XBT mainnet transactions signed with the unified signature hash
 
 ## Configuring maven/sbt
 
-`bitcoin-xbt-lib` and `bitcoin-xbt-kmp` are not published to a public repository yet. Install [bitcoin-xbt-kmp](https://github.com/ashbornelabs/bitcoin-xbt-kmp) in your local Maven repository first, then run `./mvnw install` here and add:
+`bitcoin-xbt-lib` and `bitcoin-xbt-kmp` are not published to a public repository yet. Follow [BUILDING.md](BUILDING.md) to install both in your local Maven repository, then add:
 
 ```xml
 <dependencies>
@@ -401,6 +428,31 @@ This sample demonstrates how to serialize, create and verify a P2WSH transaction
     // this tx was published on testnet as 4807cb10f50df84acd7766245133f902d22d91b7e8bfe77c4bbcb0cf9b017a86
 ```
 
+#### Signing with the XBT unified signature hash
+
+The unified signature hash commits to every output spent by the transaction, so the signing methods take all of them. Signatures that do not set `SIGHASH_UNIFIED` keep signing the legacy signature hash.
+
+```scala
+import com.ashbornelabs.bitcoin.xbt.{ScriptFlags, SigHash, SigVersion}
+import com.ashbornelabs.bitcoin.xbt.scalacompat._
+import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
+
+val privateKey = PrivateKey(ByteVector32.fromValidHex("0101010101010101010101010101010101010101010101010101010101010101"))
+val publicKey = privateKey.publicKey
+val spent = TxOut(Satoshi(100_000), Script.pay2wpkh(publicKey))
+val outPoint = OutPoint(TxHash(ByteVector32.fromValidHex("8f2e1e7c0d8b6a5c4b3a29180716f5e4d3c2b1a09f8e7d6c5b4a392817160504")), 0)
+val unsigned = Transaction(
+  version = 2,
+  txIn = TxIn(outPoint, ByteVector.empty, sequence = 0xfffffffdL) :: Nil,
+  txOut = TxOut(Satoshi(99_000), Script.pay2wpkh(publicKey)) :: Nil,
+  lockTime = 0
+)
+// SIGHASH_ALL_UNIFIED (0x21) commits to every spent output: pass them all.
+val sig = unsigned.signInput(0, Script.pay2pkh(publicKey), SigHash.SIGHASH_ALL_UNIFIED, Seq(spent), SigVersion.SIGVERSION_WITNESS_V0, privateKey)
+val signed = unsigned.updateWitness(0, Script.witnessPay2wpkh(publicKey, sig))
+signed.correctlySpends(Map(outPoint -> spent), ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS)
+```
+
 ### Wallet features
 
 Bitcoin-lib provides and simple and complete implementation of BIP32 and BIP39.
@@ -478,3 +530,9 @@ mnemonics: List[String] = List(jelly, better, achieve, collect, unaware, mountai
 scala> val seed = toSeed(mnemonics, "TREZOR")
 seed: scodec.bits.ByteVector = ByteVector(64 bytes, 0xb5b6d0127db1a9d2226af0c3346031d77af31e918dba64287a1b44b8ebf63cdd52676f672a290aae502472cf2d602c051f3e6f18055e84e4c43897fc4e51a6ff)
 ```
+
+## License
+
+bitcoin-xbt-lib is released under the [Apache License 2.0](LICENSE). It is a fork of [bitcoin-lib](https://github.com/ACINQ/bitcoin-lib), Copyright 2014 ACINQ SAS, and includes test data taken from [Bitcoin Knots](https://github.com/bitcoinknots/bitcoin), released under the MIT License. [NOTICE](NOTICE) holds these attributions and the license of Bitcoin Knots. Source files modified by Ashborne Labs carry a notice saying so.
+
+This fork is maintained by Ashborne Labs. It is not affiliated with or endorsed by ACINQ or the Bitcoin Knots project.
