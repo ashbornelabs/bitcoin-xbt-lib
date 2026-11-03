@@ -107,6 +107,27 @@ class UnifiedSighashSpec extends FunSuite {
     }
   }
 
+  /** Bitcoin BLAKE2b mainnet transactions from blocks 979793 to 979795, signed with SIGHASH_UNIFIED (pre-segwit, P2WPKH and P2WSH inputs). */
+  test("verify real xbt mainnet transactions signed with the unified sighash") {
+    val transactions = readJson("/data/xbt_unified_txs.json").extract[List[JValue]]
+    assert(transactions.size == 7)
+    transactions.foreach { json =>
+      val txid = (json \ "txid").extract[String]
+      val tx = Transaction.read((json \ "tx").extract[String])
+      assert(tx.txid == TxId.fromValidHex(txid))
+      val spentOutputs = (json \ "spentOutputs").extract[List[JValue]].map(o => TxOut(Satoshi((o \ "amount").extract[Long]), ByteVector.fromValidHex((o \ "scriptPubKey").extract[String])))
+      def verifies(flags: Int): Boolean = tx.txIn.indices.forall { i =>
+        Try {
+          val runner = new Script.Runner(Script.Context(tx, i, spentOutputs(i).amount, spentOutputs), flags)
+          runner.verifyScripts(tx.txIn(i).signatureScript, spentOutputs(i).publicKeyScript, tx.txIn(i).witness)
+        }.getOrElse(false)
+      }
+      assert(verifies(ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS), txid)
+      // These transactions are not valid on the SHA256d chain.
+      assert(!verifies(ScriptFlags.STANDARD_SCRIPT_VERIFY_FLAGS & ~ScriptFlags.SCRIPT_VERIFY_UNIFIED_SIGHASH), txid)
+    }
+  }
+
   test("sign ecdsa inputs with every spent output") {
     val scriptCode = Script.pay2pkh(pub)
     val sighashType = SigHash.SIGHASH_ALL_UNIFIED
