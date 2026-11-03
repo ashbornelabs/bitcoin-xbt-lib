@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import scodec.bits.ByteVector
@@ -14,7 +14,7 @@ import scala.jdk.CollectionConverters.{ListHasAsScala, SeqHasAsJava}
  */
 object DeterministicWallet {
 
-  case class KeyPath(keyPath: bitcoin.KeyPath) {
+  case class KeyPath(keyPath: xbt.KeyPath) {
     val path: Seq[Long] = keyPath.path.asScala.toList.map(_.longValue())
 
     def lastChildNumber: Long = keyPath.getLastChildNumber
@@ -25,9 +25,9 @@ object DeterministicWallet {
   }
 
   object KeyPath {
-    val Root: KeyPath = KeyPath(new bitcoin.KeyPath(""))
+    val Root: KeyPath = KeyPath(new xbt.KeyPath(""))
 
-    def apply(path: Seq[Long]): KeyPath = KeyPath(new bitcoin.KeyPath(path.map(x => Long.box(x)).toList.asJava))
+    def apply(path: Seq[Long]): KeyPath = KeyPath(new xbt.KeyPath(path.map(x => Long.box(x)).toList.asJava))
 
     /**
      *
@@ -35,7 +35,7 @@ object DeterministicWallet {
      *             at the end means use the hardened version of the ley index (example: m/44'/0'/0'/0)
      * @return a KeyPath instance
      */
-    def apply(path: String): KeyPath = KeyPath(new bitcoin.KeyPath(path))
+    def apply(path: String): KeyPath = KeyPath(new xbt.KeyPath(path))
   }
 
   val hardenedKeyIndex = 0x80000000L
@@ -44,7 +44,7 @@ object DeterministicWallet {
 
   def isHardened(index: Long): Boolean = index >= hardenedKeyIndex
 
-  case class ExtendedPrivateKey(priv: bitcoin.DeterministicWallet.ExtendedPrivateKey) {
+  case class ExtendedPrivateKey(priv: xbt.DeterministicWallet.ExtendedPrivateKey) {
     val secretkeybytes: ByteVector32 = priv.secretkeybytes
     val chaincode: ByteVector32 = priv.chaincode
     val depth: Int = priv.depth
@@ -74,18 +74,18 @@ object DeterministicWallet {
 
   object ExtendedPrivateKey {
     def apply(secretkeybytes: ByteVector32, chaincode: ByteVector32, depth: Int, derivationPath: KeyPath, parent: Long): ExtendedPrivateKey = ExtendedPrivateKey(
-      new bitcoin.DeterministicWallet.ExtendedPrivateKey(secretkeybytes, chaincode, depth, derivationPath.keyPath, parent)
+      new xbt.DeterministicWallet.ExtendedPrivateKey(secretkeybytes, chaincode, depth, derivationPath.keyPath, parent)
     )
 
     def decode(input: String, parentPath: KeyPath = KeyPath.Root): (Int, ExtendedPrivateKey) = {
-      val p = bitcoin.DeterministicWallet.ExtendedPrivateKey.decode(input, parentPath.keyPath)
+      val p = xbt.DeterministicWallet.ExtendedPrivateKey.decode(input, parentPath.keyPath)
       (p.getFirst, ExtendedPrivateKey(p.getSecond))
     }
   }
 
   def encode(input: ExtendedPrivateKey, prefix: Int): String = input.encode(prefix)
 
-  case class ExtendedPublicKey(pub: bitcoin.DeterministicWallet.ExtendedPublicKey) {
+  case class ExtendedPublicKey(pub: xbt.DeterministicWallet.ExtendedPublicKey) {
     val publickeybytes: ByteVector = pub.publickeybytes
     val chaincode: ByteVector32 = pub.chaincode
     val depth: Int = pub.depth
@@ -111,11 +111,11 @@ object DeterministicWallet {
 
   object ExtendedPublicKey {
     def apply(publicKey: ByteVector, chaincode: ByteVector32, depth: Int, derivationPath: KeyPath, parent: Long): ExtendedPublicKey = ExtendedPublicKey(
-      new bitcoin.DeterministicWallet.ExtendedPublicKey(publicKey, chaincode, depth, derivationPath.keyPath, parent)
+      new xbt.DeterministicWallet.ExtendedPublicKey(publicKey, chaincode, depth, derivationPath.keyPath, parent)
     )
 
     def decode(input: String, parentPath: KeyPath = KeyPath.Root): (Int, ExtendedPublicKey) = {
-      val p = bitcoin.DeterministicWallet.ExtendedPublicKey.decode(input, parentPath.keyPath)
+      val p = xbt.DeterministicWallet.ExtendedPublicKey.decode(input, parentPath.keyPath)
       (p.getFirst, ExtendedPublicKey(p.getSecond))
     }
   }
@@ -131,7 +131,7 @@ object DeterministicWallet {
    * @param seed random seed
    * @return a "master" private key
    */
-  def generate(seed: ByteVector): ExtendedPrivateKey = ExtendedPrivateKey(bitcoin.DeterministicWallet.generate(seed))
+  def generate(seed: ByteVector): ExtendedPrivateKey = ExtendedPrivateKey(xbt.DeterministicWallet.generate(seed))
 
   /**
    *
@@ -183,27 +183,27 @@ object DeterministicWallet {
   def derivePublicKey(parent: ExtendedPublicKey, path: String): ExtendedPublicKey = derivePublicKey(parent, KeyPath(path))
 
   // p2pkh mainnet
-  val xprv: Int = bitcoin.DeterministicWallet.xprv
-  val xpub: Int = bitcoin.DeterministicWallet.xpub
+  val xprv: Int = xbt.DeterministicWallet.xprv
+  val xpub: Int = xbt.DeterministicWallet.xpub
 
   // p2sh-of-p2wpkh mainnet
-  val yprv: Int = bitcoin.DeterministicWallet.yprv
-  val ypub: Int = bitcoin.DeterministicWallet.ypub
+  val yprv: Int = xbt.DeterministicWallet.yprv
+  val ypub: Int = xbt.DeterministicWallet.ypub
 
   // p2wpkh mainnet
-  val zprv: Int = bitcoin.DeterministicWallet.zprv
-  val zpub: Int = bitcoin.DeterministicWallet.zpub
+  val zprv: Int = xbt.DeterministicWallet.zprv
+  val zpub: Int = xbt.DeterministicWallet.zpub
 
   // p2pkh testnet
-  val tprv: Int = bitcoin.DeterministicWallet.tprv
-  val tpub: Int = bitcoin.DeterministicWallet.tpub
+  val tprv: Int = xbt.DeterministicWallet.tprv
+  val tpub: Int = xbt.DeterministicWallet.tpub
 
   // p2sh-of-p2wpkh testnet
-  val uprv: Int = bitcoin.DeterministicWallet.uprv
-  val upub: Int = bitcoin.DeterministicWallet.upub
+  val uprv: Int = xbt.DeterministicWallet.uprv
+  val upub: Int = xbt.DeterministicWallet.upub
 
   // p2wpkh testnet
-  val vprv: Int = bitcoin.DeterministicWallet.vprv
-  val vpub: Int = bitcoin.DeterministicWallet.vpub
+  val vprv: Int = xbt.DeterministicWallet.vprv
+  val vpub: Int = xbt.DeterministicWallet.vpub
 }
 

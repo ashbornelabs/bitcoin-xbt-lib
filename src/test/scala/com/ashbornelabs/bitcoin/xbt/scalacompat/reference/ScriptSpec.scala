@@ -21,7 +21,7 @@ object ScriptSpec {
 
   import scala.jdk.CollectionConverters.MapHasAsScala
 
-  val name2code: Map[String, Int] = fr.acinq.bitcoin.ScriptEltMapping.INSTANCE.getName2code.asScala.map { case (k, v) => k -> v.intValue() }.toMap
+  val name2code: Map[String, Int] = com.ashbornelabs.bitcoin.xbt.ScriptEltMapping.INSTANCE.getName2code.asScala.map { case (k, v) => k -> v.intValue() }.toMap
 
   def parseFromText(input: String): ByteVector = {
     @tailrec
@@ -53,7 +53,7 @@ object ScriptSpec {
     }
   }
 
-  import fr.acinq.bitcoin.ScriptFlags._
+  import com.ashbornelabs.bitcoin.xbt.ScriptFlags._
 
   val mapFlagNames: Map[String, Int] = Map(
     "NONE" -> SCRIPT_VERIFY_NONE,

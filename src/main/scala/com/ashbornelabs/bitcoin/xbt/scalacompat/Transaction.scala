@@ -1,7 +1,7 @@
 // Modified by Ashborne Labs (2026) for the Bitcoin BLAKE2b (XBT) chain. See NOTICE.
 package com.ashbornelabs.bitcoin.xbt.scalacompat
 
-import fr.acinq.bitcoin
+import com.ashbornelabs.bitcoin.xbt
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.KotlinUtils._
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Protocol._
@@ -43,9 +43,9 @@ object OutPoint extends BtcSerializer[OutPoint] {
 
   def apply(txid: TxId, index: Long): OutPoint = OutPoint(TxHash(txid), index)
 
-  override def read(input: InputStream, protocolVersion: Long): OutPoint = kmp2scala(fr.acinq.bitcoin.OutPoint.read(InputStreamWrapper(input), protocolVersion))
+  override def read(input: InputStream, protocolVersion: Long): OutPoint = kmp2scala(com.ashbornelabs.bitcoin.xbt.OutPoint.read(InputStreamWrapper(input), protocolVersion))
 
-  override def write(input: OutPoint, out: OutputStream, protocolVersion: Long): Unit = fr.acinq.bitcoin.OutPoint.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
+  override def write(input: OutPoint, out: OutputStream, protocolVersion: Long): Unit = com.ashbornelabs.bitcoin.xbt.OutPoint.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
 
   def isCoinbase(input: OutPoint): Boolean = scala2kmp(input).isCoinbase
 
@@ -72,12 +72,12 @@ case class OutPoint(hash: TxHash, index: Long) extends BtcSerializable[OutPoint]
 object TxIn extends BtcSerializer[TxIn] {
   def apply(outPoint: OutPoint, signatureScript: Seq[ScriptElt], sequence: Long): TxIn = new TxIn(outPoint, Script.write(signatureScript), sequence)
 
-  override def read(input: InputStream, protocolVersion: Long): TxIn = kmp2scala(fr.acinq.bitcoin.TxIn.read(InputStreamWrapper(input), protocolVersion))
+  override def read(input: InputStream, protocolVersion: Long): TxIn = kmp2scala(com.ashbornelabs.bitcoin.xbt.TxIn.read(InputStreamWrapper(input), protocolVersion))
 
-  override def write(input: TxIn, out: OutputStream, protocolVersion: Long): Unit = fr.acinq.bitcoin.TxIn.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
+  override def write(input: TxIn, out: OutputStream, protocolVersion: Long): Unit = com.ashbornelabs.bitcoin.xbt.TxIn.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
 
   override def validate(input: TxIn): Unit = {
-    require(input.signatureScript.length <= bitcoin.Script.MAX_SCRIPT_ELEMENT_SIZE, s"signature script is ${input.signatureScript.length} bytes, limit is ${bitcoin.Script.MAX_SCRIPT_ELEMENT_SIZE} bytes")
+    require(input.signatureScript.length <= xbt.Script.MAX_SCRIPT_ELEMENT_SIZE, s"signature script is ${input.signatureScript.length} bytes, limit is ${xbt.Script.MAX_SCRIPT_ELEMENT_SIZE} bytes")
   }
 
   def coinbase(script: ByteVector): TxIn = {
@@ -87,7 +87,7 @@ object TxIn extends BtcSerializer[TxIn] {
 
   def coinbase(script: Seq[ScriptElt]): TxIn = coinbase(Script.write(script))
 
-  val SEQUENCE_FINAL: Long = fr.acinq.bitcoin.TxIn.SEQUENCE_FINAL
+  val SEQUENCE_FINAL: Long = com.ashbornelabs.bitcoin.xbt.TxIn.SEQUENCE_FINAL
 }
 
 /**
@@ -100,7 +100,7 @@ object TxIn extends BtcSerializer[TxIn] {
  * @param witness         Transaction witness (i.e. what is in sig script for standard transactions).
  */
 case class TxIn(outPoint: OutPoint, signatureScript: ByteVector, sequence: Long, witness: ScriptWitness = ScriptWitness.empty) extends BtcSerializable[TxIn] {
-  def isFinal: Boolean = sequence == bitcoin.TxIn.SEQUENCE_FINAL
+  def isFinal: Boolean = sequence == xbt.TxIn.SEQUENCE_FINAL
   def hasWitness: Boolean = witness.isNotNull
   def weight(): Int = scala2kmp(this).weight()
 
@@ -110,15 +110,15 @@ case class TxIn(outPoint: OutPoint, signatureScript: ByteVector, sequence: Long,
 object TxOut extends BtcSerializer[TxOut] {
   def apply(amount: Satoshi, publicKeyScript: Seq[ScriptElt]): TxOut = new TxOut(amount, Script.write(publicKeyScript))
 
-  override def read(input: InputStream, protocolVersion: Long): TxOut = kmp2scala(fr.acinq.bitcoin.TxOut.read(InputStreamWrapper(input), protocolVersion))
+  override def read(input: InputStream, protocolVersion: Long): TxOut = kmp2scala(com.ashbornelabs.bitcoin.xbt.TxOut.read(InputStreamWrapper(input), protocolVersion))
 
-  override def write(input: TxOut, out: OutputStream, protocolVersion: Long): Unit = fr.acinq.bitcoin.TxOut.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
+  override def write(input: TxOut, out: OutputStream, protocolVersion: Long): Unit = com.ashbornelabs.bitcoin.xbt.TxOut.write(scala2kmp(input), OutputStreamWrapper(out), protocolVersion)
 
   override def validate(input: TxOut): Unit = {
     import input._
     require(amount.toLong >= 0, s"invalid txout amount: $amount")
     require(amount.toLong <= BtcAmount.MaxMoney, s"invalid txout amount: $amount")
-    require(publicKeyScript.length < bitcoin.Script.MAX_SCRIPT_ELEMENT_SIZE, s"public key script is ${publicKeyScript.length} bytes, limit is ${bitcoin.Script.MAX_SCRIPT_ELEMENT_SIZE} bytes")
+    require(publicKeyScript.length < xbt.Script.MAX_SCRIPT_ELEMENT_SIZE, s"public key script is ${publicKeyScript.length} bytes, limit is ${xbt.Script.MAX_SCRIPT_ELEMENT_SIZE} bytes")
   }
 }
 
@@ -137,9 +137,9 @@ case class TxOut(amount: Satoshi, publicKeyScript: ByteVector) extends BtcSerial
 object ScriptWitness extends BtcSerializer[ScriptWitness] {
   val empty: ScriptWitness = ScriptWitness(Seq.empty[ByteVector])
 
-  override def write(t: ScriptWitness, out: OutputStream, protocolVersion: Long): Unit = fr.acinq.bitcoin.ScriptWitness.write(scala2kmp(t), OutputStreamWrapper(out), protocolVersion)
+  override def write(t: ScriptWitness, out: OutputStream, protocolVersion: Long): Unit = com.ashbornelabs.bitcoin.xbt.ScriptWitness.write(scala2kmp(t), OutputStreamWrapper(out), protocolVersion)
 
-  override def read(in: InputStream, protocolVersion: Long): ScriptWitness = kmp2scala(fr.acinq.bitcoin.ScriptWitness.read(InputStreamWrapper(in), protocolVersion))
+  override def read(in: InputStream, protocolVersion: Long): ScriptWitness = kmp2scala(com.ashbornelabs.bitcoin.xbt.ScriptWitness.read(InputStreamWrapper(in), protocolVersion))
 }
 
 /**
@@ -162,24 +162,24 @@ object Transaction extends BtcSerializer[Transaction] {
    * @param version protocol version (and NOT transaction version !)
    * @return true if protocol version specifies that witness data is to be serialized
    */
-  def serializeTxWitness(version: Long): Boolean = fr.acinq.bitcoin.Transaction.serializeTxWitness(version)
+  def serializeTxWitness(version: Long): Boolean = com.ashbornelabs.bitcoin.xbt.Transaction.serializeTxWitness(version)
 
   override def read(input: InputStream, protocolVersion: Long): Transaction = {
-    val tx = fr.acinq.bitcoin.Transaction.read(InputStreamWrapper(input), protocolVersion)
+    val tx = com.ashbornelabs.bitcoin.xbt.Transaction.read(InputStreamWrapper(input), protocolVersion)
     tx
   }
 
   override def write(tx: Transaction, out: OutputStream, protocolVersion: Long): Unit = {
-    fr.acinq.bitcoin.Transaction.write(tx, OutputStreamWrapper(out), protocolVersion)
+    com.ashbornelabs.bitcoin.xbt.Transaction.write(tx, OutputStreamWrapper(out), protocolVersion)
   }
 
   override def validate(input: Transaction): Unit = {
-    fr.acinq.bitcoin.Transaction.validate(input)
+    com.ashbornelabs.bitcoin.xbt.Transaction.validate(input)
   }
 
-  def baseSize(tx: Transaction, protocolVersion: Long = PROTOCOL_VERSION): Int = fr.acinq.bitcoin.Transaction.baseSize(scala2kmp(tx), protocolVersion)
+  def baseSize(tx: Transaction, protocolVersion: Long = PROTOCOL_VERSION): Int = com.ashbornelabs.bitcoin.xbt.Transaction.baseSize(scala2kmp(tx), protocolVersion)
 
-  def totalSize(tx: Transaction, protocolVersion: Long = PROTOCOL_VERSION): Int = fr.acinq.bitcoin.Transaction.totalSize(scala2kmp(tx), protocolVersion)
+  def totalSize(tx: Transaction, protocolVersion: Long = PROTOCOL_VERSION): Int = com.ashbornelabs.bitcoin.xbt.Transaction.totalSize(scala2kmp(tx), protocolVersion)
 
   def weight(tx: Transaction, protocolVersion: Long = PROTOCOL_VERSION): Int = totalSize(tx, protocolVersion) + 3 * baseSize(tx, protocolVersion)
 
@@ -208,7 +208,7 @@ object Transaction extends BtcSerializer[Transaction] {
    * @return a hash which can be used to sign the referenced tx input
    */
   def hashForSigning(tx: Transaction, inputIndex: Int, previousOutputScript: ByteVector, sighashType: Int): ByteVector32 = {
-    ByteVector32(ByteVector.view(fr.acinq.bitcoin.Transaction.hashForSigning(tx, inputIndex, previousOutputScript.toArrayUnsafe, sighashType)))
+    ByteVector32(ByteVector.view(com.ashbornelabs.bitcoin.xbt.Transaction.hashForSigning(tx, inputIndex, previousOutputScript.toArrayUnsafe, sighashType)))
   }
 
   /**
@@ -309,7 +309,7 @@ object Transaction extends BtcSerializer[Transaction] {
    * @param sighashType signature hash type, which will be appended to the signature
    * @return an ECDSA signature in the format used in transaction witnesses: DER encoded followed by a sighash byte
    */
-  def encodeWitnessEcdsaSig(sig: ByteVector64, sighashType: Int): ByteVector = ByteVector.view(fr.acinq.bitcoin.Transaction.encodeWitnessEcdsaSig(sig, sighashType))
+  def encodeWitnessEcdsaSig(sig: ByteVector64, sighashType: Int): ByteVector = ByteVector.view(com.ashbornelabs.bitcoin.xbt.Transaction.encodeWitnessEcdsaSig(sig, sighashType))
 
   /**
    * Sign a taproot tx input, using the internal key path.
@@ -359,7 +359,7 @@ object Transaction extends BtcSerializer[Transaction] {
  * @param lockTime The block number or timestamp at which this transaction is locked
  */
 case class Transaction(version: Long, txIn: Seq[TxIn], txOut: Seq[TxOut], lockTime: Long) extends BtcSerializable[Transaction] {
-  lazy val kmp: fr.acinq.bitcoin.Transaction = new fr.acinq.bitcoin.Transaction(version, txIn.map(scala2kmp).asJava, txOut.map(scala2kmp).asJava, lockTime)
+  lazy val kmp: com.ashbornelabs.bitcoin.xbt.Transaction = new com.ashbornelabs.bitcoin.xbt.Transaction(version, txIn.map(scala2kmp).asJava, txOut.map(scala2kmp).asJava, lockTime)
 
   // standard transaction hash, used to identify transactions (in transactions outputs for example)
   lazy val hash: TxHash = kmp.getHash
@@ -381,8 +381,8 @@ case class Transaction(version: Long, txIn: Seq[TxIn], txOut: Seq[TxOut], lockTi
    */
   def isFinal(blockHeight: Long, blockTime: Long): Boolean = lockTime match {
     case 0 => true
-    case value if value < bitcoin.Transaction.LOCKTIME_THRESHOLD && value < blockHeight => true
-    case value if value >= bitcoin.Transaction.LOCKTIME_THRESHOLD && value < blockTime => true
+    case value if value < xbt.Transaction.LOCKTIME_THRESHOLD && value < blockHeight => true
+    case value if value >= xbt.Transaction.LOCKTIME_THRESHOLD && value < blockTime => true
     case _ if txIn.exists(!_.isFinal) => false
     case _ => true
   }

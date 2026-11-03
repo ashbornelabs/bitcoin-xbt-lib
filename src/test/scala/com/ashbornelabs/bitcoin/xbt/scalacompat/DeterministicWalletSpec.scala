@@ -158,7 +158,8 @@ class DeterministicWalletSpec extends FlatSpec {
       random.nextBytes(seed)
       val master = DeterministicWallet.generate(ByteVector.view(seed))
       for (_ <- 0 until 50) {
-        val index = random.nextLong()
+        // BIP32 child numbers are unsigned 32-bit integers.
+        val index = random.nextLong(0x100000000L)
         val priv = master.derivePrivateKey(index)
 
         val encoded = priv.encode(DeterministicWallet.tprv)

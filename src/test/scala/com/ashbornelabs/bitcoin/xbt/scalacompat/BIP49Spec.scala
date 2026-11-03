@@ -3,7 +3,7 @@ package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.{PrivateKey, PublicKey}
 import com.ashbornelabs.bitcoin.xbt.scalacompat.DeterministicWallet.KeyPath
-import fr.acinq.bitcoin.Base58
+import com.ashbornelabs.bitcoin.xbt.Base58
 import org.scalatest.FunSuite
 import scodec.bits._
 
@@ -25,6 +25,6 @@ class BIP49Spec extends FunSuite {
     assert(key.privateKey.toBase58(Base58.Prefix.SecretKeyTestnet) == "cULrpoZGXiuC19Uhvykx7NugygA3k86b3hmdCeyvHYQZSxojGyXJ")
     assert(key.privateKey == PrivateKey(hex"0xc9bdb49cfbaedca21c4b1f3a7803c34636b1d7dc55a717132443fc3f4c5867e801"))
     assert(key.publicKey == PublicKey(hex"0x03a1af804ac108a8a51782198c2d034b28bf90c8803f5a53f76276fa69a4eae77f"))
-    assert(computeBIP49Address(key.publicKey, Block.Testnet3GenesisBlock.hash) == "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2")
+    assert(computeBIP49Address(key.publicKey, Block.Testnet4GenesisBlock.hash) == "2Mww8dCYPUpKHofjgcXcBCEGmniw9CoaiD2")
   }
 }

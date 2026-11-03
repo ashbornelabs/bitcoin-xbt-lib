@@ -24,27 +24,17 @@ object BlockId {
 object Block {
   // genesis blocks
   object LivenetGenesisBlock {
-    val blockId: BlockId = fr.acinq.bitcoin.Block.LivenetGenesisBlock.blockId
-    val hash: BlockHash = fr.acinq.bitcoin.Block.LivenetGenesisBlock.hash
-  }
-
-  object Testnet3GenesisBlock {
-    val blockId: BlockId = fr.acinq.bitcoin.Block.Testnet3GenesisBlock.blockId
-    val hash: BlockHash = fr.acinq.bitcoin.Block.Testnet3GenesisBlock.hash
+    val blockId: BlockId = com.ashbornelabs.bitcoin.xbt.Block.LivenetGenesisBlock.blockId
+    val hash: BlockHash = com.ashbornelabs.bitcoin.xbt.Block.LivenetGenesisBlock.hash
   }
 
   object Testnet4GenesisBlock {
-    val blockId: BlockId = fr.acinq.bitcoin.Block.Testnet4GenesisBlock.blockId
-    val hash: BlockHash = fr.acinq.bitcoin.Block.Testnet4GenesisBlock.hash
+    val blockId: BlockId = com.ashbornelabs.bitcoin.xbt.Block.Testnet4GenesisBlock.blockId
+    val hash: BlockHash = com.ashbornelabs.bitcoin.xbt.Block.Testnet4GenesisBlock.hash
   }
 
   object RegtestGenesisBlock {
-    val blockId: BlockId = fr.acinq.bitcoin.Block.RegtestGenesisBlock.blockId
-    val hash: BlockHash = fr.acinq.bitcoin.Block.RegtestGenesisBlock.hash
-  }
-
-  object SignetGenesisBlock {
-    val blockId: BlockId = fr.acinq.bitcoin.Block.SignetGenesisBlock.blockId
-    val hash: BlockHash = fr.acinq.bitcoin.Block.SignetGenesisBlock.hash
+    val blockId: BlockId = com.ashbornelabs.bitcoin.xbt.Block.RegtestGenesisBlock.blockId
+    val hash: BlockHash = com.ashbornelabs.bitcoin.xbt.Block.RegtestGenesisBlock.hash
   }
 }

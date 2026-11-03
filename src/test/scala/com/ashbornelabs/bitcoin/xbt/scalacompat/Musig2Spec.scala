@@ -3,7 +3,7 @@ package com.ashbornelabs.bitcoin.xbt.scalacompat
 
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.PrivateKey
 import com.ashbornelabs.bitcoin.xbt.scalacompat.Crypto.TaprootTweak.KeyPathTweak
-import fr.acinq.bitcoin.{ScriptFlags, SigHash}
+import com.ashbornelabs.bitcoin.xbt.{ScriptFlags, SigHash}
 import org.scalatest.FunSuite
 import scodec.bits.{ByteVector, HexStringSyntax}
 
