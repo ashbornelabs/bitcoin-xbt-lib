@@ -52,7 +52,7 @@ All the features are implemented in Kotlin in the `com.ashbornelabs.bitcoin.xbt`
 
 ## Objectives
 
-Our goal is not to re-implement a full Bitcoin node but to build a library that can be used to build applications that rely on bitcoind to interface with the Bitcoin network (to retrieve and index transactions and blocks, for example...). We use it very often to build quick prototypes and test new ideas. Besides, some parts of the protocol are fairly simple and "safe" to re-implement (BIP32/BIP39 for example), especially for indexing/analysis purposes. And, of course, we use it for our own work on Lightning (see <https://github.com/ACINQ/eclair>).
+Our goal is not to re-implement a full Bitcoin node but to build a library that can be used to build applications that rely on bitcoind to interface with the Bitcoin network (to retrieve and index transactions and blocks, for example...). We use it very often to build quick prototypes and test new ideas. Besides, some parts of the protocol are fairly simple and "safe" to re-implement (BIP32/BIP39 for example), especially for indexing/analysis purposes. ACINQ uses the original library in its Lightning node, <https://github.com/ACINQ/eclair>.
 
 ## Status
 
